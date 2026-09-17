@@ -223,6 +223,8 @@
             background: rgba(0, 0, 0, 0.45);
             user-select: none;
             -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
         }
 
         #capture-selection {
@@ -231,26 +233,24 @@
             background: transparent;
             display: none;
             pointer-events: none;
+            /* Ce box-shadow crée l'assombrissement autour de la sélection */
             box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.45);
+            z-index: 1;
         }
 
         #capture-selection::after {
             content: '';
             position: absolute;
-            inset: -6px;
-            border: 1px dashed rgba(255, 255, 255, 0.7);
+            inset: -4px;
+            border: 1px dashed rgba(255, 255, 255, 0.75);
             pointer-events: none;
         }
 
         #capture-selection.success {
-            border-color: #28a745 !important;
-            animation: captureFlash 0.4s ease-out;
-        }
-
-        @keyframes captureFlash {
-            0%   { border-color: #28a745; box-shadow: 0 0 0 9999px rgba(0,0,0,0.45); }
-            50%  { border-color: #28a745; box-shadow: 0 0 0 9999px rgba(40,167,69,0.35); }
-            100% { border-color: #28a745; box-shadow: 0 0 0 9999px rgba(0,0,0,0.45); }
+            border-color: #28a745;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.45),
+                        0 0 0 4px rgba(40, 167, 69, 0.35),
+                        0 0 24px 6px rgba(40, 167, 69, 0.55);
         }
 
         #capture-hint {
@@ -258,18 +258,19 @@
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(0, 0, 0, 0.88);
             color: #fff;
             padding: 12px 22px;
             border-radius: 8px;
             font-size: 14px;
             font-family: "Segoe UI", Arial, sans-serif;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
             pointer-events: none;
             display: flex;
             align-items: center;
             gap: 10px;
             z-index: 100000;
+            white-space: nowrap;
         }
 
         #capture-hint kbd {
@@ -293,10 +294,10 @@
         }
 
         #capture-toolbar button {
-            padding: 8px 16px;
+            padding: 10px 18px;
             font-size: 13px;
-            border-radius: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            border-radius: 22px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
         }
     </style>
 </head>
@@ -357,6 +358,8 @@
 
     <script>
         (function() {
+            'use strict';
+
             // ==================== CONSTANTES ====================
             const STORAGE_KEY = 'wfm_auchan_alert_history';
             const SOUND_DURATION = 300;
@@ -779,17 +782,121 @@
                 showNotification('Historique complet exporté en CSV.', 'success');
             }
 
-            // ==================== CAPTURE ÉCRAN (style Windows + Shift + S) ====================
+            // ====================================================================
+            // ==================== CAPTURE ÉCRAN (style Windows+Shift+S) =========
+            // ====================================================================
             let captureActive = false;
+
+            function raf2() {
+                return new Promise(resolve =>
+                    requestAnimationFrame(() => requestAnimationFrame(resolve))
+                );
+            }
+
+            function clamp(v, min, max) {
+                return Math.max(min, Math.min(max, v));
+            }
+
+            // Télécharge un canvas en PNG (fallback si presse-papier indisponible)
+            function downloadCanvas(canvas) {
+                const link = document.createElement('a');
+                const now = new Date();
+                const date = now.toISOString().slice(0, 10);
+                const time = now.toTimeString().slice(0, 8).replace(/:/g, '-');
+                link.download = `capture_resultat_wfm_${date}_${time}.png`;
+                link.href = canvas.toDataURL('image/png');
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+
+            // Copie un canvas dans le presse-papier (avec fallback téléchargement)
+            async function copyCanvasToClipboard(canvas) {
+                const hasClipboardAPI =
+                    window.isSecureContext &&
+                    navigator.clipboard &&
+                    typeof window.ClipboardItem !== 'undefined' &&
+                    typeof navigator.clipboard.write === 'function';
+
+                if (!hasClipboardAPI) {
+                    downloadCanvas(canvas);
+                    showNotification('📸 Presse-papier indisponible : capture téléchargée.', 'info');
+                    return;
+                }
+
+                try {
+                    const blob = await new Promise((resolve, reject) => {
+                        canvas.toBlob(b => b ? resolve(b) : reject(new Error('Blob vide')), 'image/png');
+                    });
+
+                    await navigator.clipboard.write([
+                        new ClipboardItem({ 'image/png': blob })
+                    ]);
+
+                    showNotification('📸 Capture copiée dans le presse-papier (Ctrl+V pour coller).', 'success');
+                } catch (err) {
+                    console.warn('Échec de la copie presse-papier :', err);
+                    downloadCanvas(canvas);
+                    showNotification('📸 Capture téléchargée (presse-papier refusé par le navigateur).', 'info');
+                }
+            }
+
+            // Capture une région de l'écran : capture TOUT le document puis crop manuel
+            async function captureRegion(viewLeft, viewTop, viewWidth, viewHeight) {
+                const scale = Math.max(window.devicePixelRatio || 1, 2);
+                const scrollX = window.scrollX || window.pageXOffset || 0;
+                const scrollY = window.scrollY || window.pageYOffset || 0;
+
+                // Étape 1 : capture intégrale du document (le plus fiable)
+                const fullCanvas = await html2canvas(document.body, {
+                    backgroundColor: '#F4F6F9',
+                    scale: scale,
+                    useCORS: true,
+                    allowTaint: true,
+                    logging: false,
+                    scrollX: -scrollX,
+                    scrollY: -scrollY,
+                    windowWidth: document.documentElement.clientWidth,
+                    windowHeight: document.documentElement.clientHeight
+                });
+
+                // Étape 2 : calcul des coordonnées dans le repère du canvas capturé
+                // (coordonnées viewport + scroll = coordonnées document)
+                const srcX = Math.round((viewLeft + scrollX) * scale);
+                const srcY = Math.round((viewTop + scrollY) * scale);
+                const srcW = Math.round(viewWidth * scale);
+                const srcH = Math.round(viewHeight * scale);
+
+                // Étape 3 : clamp dans les bornes du canvas source
+                const cx = clamp(srcX, 0, Math.max(0, fullCanvas.width - 1));
+                const cy = clamp(srcY, 0, Math.max(0, fullCanvas.height - 1));
+                const cw = clamp(srcW, 1, fullCanvas.width - cx);
+                const ch = clamp(srcH, 1, fullCanvas.height - cy);
+
+                // Étape 4 : création du canvas de sortie avec crop
+                const out = document.createElement('canvas');
+                out.width = cw;
+                out.height = ch;
+                const ctx = out.getContext('2d');
+                ctx.fillStyle = '#F4F6F9';
+                ctx.fillRect(0, 0, cw, ch);
+                ctx.drawImage(
+                    fullCanvas,
+                    cx, cy, cw, ch,   // source
+                    0,  0,  cw, ch    // destination
+                );
+
+                return out;
+            }
 
             function startScreenCapture() {
                 if (captureActive) return;
+
                 if (typeof html2canvas === 'undefined') {
                     showNotification('Bibliothèque de capture non disponible.', 'warning');
                     return;
                 }
 
-                // Vérifier qu'il y a bien un résultat à capturer
                 if (!resultsDiv || resultsDiv.textContent.includes('En attente du tableau')) {
                     showNotification('Aucun résultat à capturer.', 'info');
                     return;
@@ -797,12 +904,17 @@
 
                 captureActive = true;
 
-                // Création de l'overlay
+                const prevBodyUserSelect = document.body.style.userSelect;
+                document.body.style.userSelect = 'none';
+
+                // --- Création de l'overlay ---
                 const overlay = document.createElement('div');
                 overlay.id = 'capture-overlay';
 
                 const selection = document.createElement('div');
                 selection.id = 'capture-selection';
+
+                overlay.appendChild(selection);
 
                 const hint = document.createElement('div');
                 hint.id = 'capture-hint';
@@ -814,7 +926,7 @@
                 const btnResults = document.createElement('button');
                 btnResults.className = 'btn-analyze';
                 btnResults.textContent = '📋 Résultats';
-                btnResults.title = 'Présélectionner toute la zone des résultats';
+                btnResults.title = 'Capturer automatiquement la zone des résultats';
 
                 const btnCancel = document.createElement('button');
                 btnCancel.className = 'btn-clear';
@@ -823,190 +935,158 @@
                 toolbar.appendChild(btnResults);
                 toolbar.appendChild(btnCancel);
 
-                overlay.appendChild(selection);
                 document.body.appendChild(overlay);
                 document.body.appendChild(hint);
                 document.body.appendChild(toolbar);
 
+                // --- État ---
                 let startX = 0, startY = 0;
                 let isDrawing = false;
 
-                function updateSelection(curX, curY) {
-                    const left = Math.min(startX, curX);
-                    const top = Math.min(startY, curY);
-                    const width = Math.abs(curX - startX);
-                    const height = Math.abs(curY - startY);
-                    selection.style.left = left + 'px';
-                    selection.style.top = top + 'px';
-                    selection.style.width = width + 'px';
-                    selection.style.height = height + 'px';
-                    return { left, top, width, height };
+                function computeRect(curX, curY) {
+                    return {
+                        left: Math.min(startX, curX),
+                        top: Math.min(startY, curY),
+                        width: Math.abs(curX - startX),
+                        height: Math.abs(curY - startY)
+                    };
+                }
+
+                function applyRectToSelection(rect) {
+                    selection.style.left = rect.left + 'px';
+                    selection.style.top = rect.top + 'px';
+                    selection.style.width = rect.width + 'px';
+                    selection.style.height = rect.height + 'px';
                 }
 
                 function cleanup() {
                     captureActive = false;
+                    document.body.style.userSelect = prevBodyUserSelect;
+                    document.removeEventListener('keydown', escHandler, true);
+                    window.removeEventListener('resize', resizeHandler, true);
                     if (overlay.parentNode) overlay.remove();
                     if (hint.parentNode) hint.remove();
                     if (toolbar.parentNode) toolbar.remove();
-                    document.removeEventListener('keydown', escHandler);
                 }
 
-                async function captureRegion(left, top, width, height) {
-                    try {
-                        // Masquer l'UI de capture le temps du rendu
-                        overlay.style.visibility = 'hidden';
-                        hint.style.visibility = 'hidden';
-                        toolbar.style.visibility = 'hidden';
-
-                        // Laisser le navigateur repeindre
-                        await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
-
-                        const scale = Math.max(window.devicePixelRatio || 1, 2);
-
-                        const canvas = await html2canvas(document.body, {
-                            backgroundColor: '#F4F6F9',
-                            scale: scale,
-                            useCORS: true,
-                            logging: false,
-                            x: window.scrollX + left,
-                            y: window.scrollY + top,
-                            width: width,
-                            height: height,
-                            windowWidth: document.documentElement.scrollWidth,
-                            windowHeight: document.documentElement.scrollHeight
-                        });
-
-                        // Effet visuel "succès" avant nettoyage
-                        overlay.style.visibility = 'visible';
-                        selection.style.display = 'block';
-                        selection.style.left = left + 'px';
-                        selection.style.top = top + 'px';
-                        selection.style.width = width + 'px';
-                        selection.style.height = height + 'px';
-                        selection.classList.add('success');
-
-                        await new Promise(r => setTimeout(r, 300));
+                const escHandler = (e) => {
+                    if (e.key === 'Escape') {
+                        e.preventDefault();
+                        e.stopPropagation();
                         cleanup();
+                        showNotification('Capture annulée.', 'info');
+                    }
+                };
+                document.addEventListener('keydown', escHandler, true);
 
-                        // Copie dans le presse-papier (comme Windows+Shift+S)
-                        await copyCanvasToClipboard(canvas);
+                const resizeHandler = () => {
+                    cleanup();
+                    showNotification('Capture annulée (fenêtre redimensionnée).', 'info');
+                };
+                window.addEventListener('resize', resizeHandler, true);
+
+                // --- Exécution de la capture ---
+                async function performCapture(rect) {
+                    // Flash vert sur la sélection
+                    selection.classList.add('success');
+                    await new Promise(r => setTimeout(r, 220));
+
+                    // Masquer complètement l'UI de capture
+                    overlay.style.display = 'none';
+                    hint.style.display = 'none';
+                    toolbar.style.display = 'none';
+                    await raf2();
+                    await new Promise(r => setTimeout(r, 80));
+
+                    let croppedCanvas;
+                    try {
+                        croppedCanvas = await captureRegion(
+                            rect.left, rect.top, rect.width, rect.height
+                        );
                     } catch (err) {
-                        console.error('Erreur de capture :', err);
+                        console.error('Erreur html2canvas :', err);
                         cleanup();
                         showNotification('Erreur lors de la capture écran.', 'warning');
-                    }
-                }
-
-                async function copyCanvasToClipboard(canvas) {
-                    // Vérifier la disponibilité de l'API Clipboard
-                    const hasClipboard = navigator.clipboard &&
-                                         typeof window.ClipboardItem !== 'undefined';
-
-                    if (!hasClipboard) {
-                        downloadCanvasFallback(canvas);
-                        showNotification('📸 Presse-papier indisponible : capture téléchargée.', 'info');
                         return;
                     }
 
-                    try {
-                        const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
-                        if (!blob) throw new Error('Blob vide');
-
-                        await navigator.clipboard.write([
-                            new ClipboardItem({ 'image/png': blob })
-                        ]);
-
-                        showNotification('📸 Capture copiée dans le presse-papier (Ctrl+V pour coller).', 'success');
-                    } catch (err) {
-                        console.warn('Échec copie presse-papier :', err);
-                        downloadCanvasFallback(canvas);
-                        showNotification('📸 Capture téléchargée (presse-papier refusé par le navigateur).', 'info');
-                    }
-                }
-
-                function downloadCanvasFallback(canvas) {
-                    const link = document.createElement('a');
-                    const now = new Date();
-                    const date = now.toISOString().slice(0, 10);
-                    const time = now.toTimeString().slice(0, 8).replace(/:/g, '-');
-                    link.download = `capture_resultat_wfm_${date}_${time}.png`;
-                    link.href = canvas.toDataURL('image/png');
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
+                    cleanup();
+                    await copyCanvasToClipboard(croppedCanvas);
                 }
 
                 // --- Événements souris ---
                 overlay.addEventListener('mousedown', (e) => {
                     if (e.button !== 0) return;
+                    e.preventDefault();
                     isDrawing = true;
                     startX = e.clientX;
                     startY = e.clientY;
                     selection.classList.remove('success');
-                    selection.style.display = 'block';
-                    updateSelection(startX, startY);
-                    // Astuce : on retire le fond de l'overlay, la box-shadow du selection crée le voile sombre autour
-                    overlay.style.background = 'transparent';
+                    selection.style.display = 'none';
+                    overlay.style.background = 'rgba(0,0,0,0.45)';
                 });
 
                 overlay.addEventListener('mousemove', (e) => {
                     if (!isDrawing) return;
-                    updateSelection(e.clientX, e.clientY);
+                    e.preventDefault();
+                    const rect = computeRect(e.clientX, e.clientY);
+                    applyRectToSelection(rect);
+                    selection.style.display = 'block';
+                    // Le box-shadow de #capture-selection crée l'assombrissement
+                    overlay.style.background = 'transparent';
                 });
 
                 overlay.addEventListener('mouseup', async (e) => {
                     if (!isDrawing) return;
+                    e.preventDefault();
                     isDrawing = false;
 
-                    const rect = updateSelection(e.clientX, e.clientY);
+                    const rect = computeRect(e.clientX, e.clientY);
 
                     if (rect.width < 8 || rect.height < 8) {
-                        // Trop petit → on annule cette sélection mais on garde l'overlay actif
+                        // Sélection trop petite : on réinitialise l'état (on reste en capture)
                         selection.style.display = 'none';
-                        overlay.style.background = 'rgba(0, 0, 0, 0.45)';
+                        overlay.style.background = 'rgba(0,0,0,0.45)';
                         return;
                     }
 
-                    await captureRegion(rect.left, rect.top, rect.width, rect.height);
+                    await performCapture(rect);
                 });
 
-                // --- Bouton "Résultats" : présélection automatique ---
-                btnResults.addEventListener('click', async (e) => {
-                    e.stopPropagation();
-                    const r = resultsDiv.getBoundingClientRect();
-                    const padding = 8;
-                    const left = Math.max(0, r.left - padding);
-                    const top = Math.max(0, r.top - padding);
-                    const width = Math.min(window.innerWidth - left, r.width + padding * 2);
-                    const height = Math.min(window.innerHeight - top, r.height + padding * 2);
-
-                    selection.style.display = 'block';
-                    selection.style.left = left + 'px';
-                    selection.style.top = top + 'px';
-                    selection.style.width = width + 'px';
-                    selection.style.height = height + 'px';
-                    overlay.style.background = 'transparent';
-
-                    // Petit délai pour que l'utilisateur voie la sélection
-                    await new Promise(r2 => setTimeout(r2, 150));
-                    await captureRegion(left, top, width, height);
-                });
-
-                // --- Bouton Annuler ---
-                btnCancel.addEventListener('click', (e) => {
-                    e.stopPropagation();
+                // Empêche le menu contextuel (clic droit) et annule
+                overlay.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
                     cleanup();
                     showNotification('Capture annulée.', 'info');
                 });
 
-                // --- Touche ESC ---
-                const escHandler = (e) => {
-                    if (e.key === 'Escape') {
-                        cleanup();
-                        showNotification('Capture annulée.', 'info');
-                    }
-                };
-                document.addEventListener('keydown', escHandler);
+                // --- Bouton "Résultats" : capture automatique de la zone des résultats ---
+                btnResults.addEventListener('click', async (e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+
+                    const r = resultsDiv.getBoundingClientRect();
+                    const pad = 8;
+                    const left = Math.max(0, r.left - pad);
+                    const top = Math.max(0, r.top - pad);
+                    const width = Math.min(window.innerWidth - left, r.width + pad * 2);
+                    const height = Math.min(window.innerHeight - top, r.height + pad * 2);
+
+                    applyRectToSelection({ left, top, width, height });
+                    selection.style.display = 'block';
+                    overlay.style.background = 'transparent';
+
+                    await new Promise(res => setTimeout(res, 180));
+                    await performCapture({ left, top, width, height });
+                });
+
+                // --- Bouton "Annuler" ---
+                btnCancel.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    cleanup();
+                    showNotification('Capture annulée.', 'info');
+                });
             }
 
             // ==================== ÉVÉNEMENTS ====================
