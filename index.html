@@ -19,11 +19,7 @@
             --alert-notaccepted-border: #721c24;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: "Segoe UI", Arial, sans-serif;
@@ -57,15 +53,8 @@
             gap: 10px;
         }
 
-        .header h1 {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .header .time {
-            font-size: 0.9rem;
-            opacity: 0.9;
-        }
+        .header h1 { font-size: 1.5rem; font-weight: bold; }
+        .header .time { font-size: 0.9rem; opacity: 0.9; }
 
         .content {
             padding: 20px;
@@ -88,10 +77,7 @@
             gap: 8px;
         }
 
-        .paste-area {
-            position: relative;
-        }
-
+        .paste-area { position: relative; }
         .paste-area label {
             font-weight: bold;
             color: var(--auchan-dark);
@@ -132,64 +118,26 @@
             transition: background 0.3s, transform 0.1s;
             font-size: 14px;
         }
-        .btn-capture {
-            background: #8e44ad;
-            color: white;
-        }
 
-        .btn-capture:hover {
-            background: #6c3483;
-        }
+        .btn-capture { background: #8e44ad; color: white; }
+        .btn-capture:hover { background: #6c3483; }
 
+        button:active { transform: scale(0.98); }
 
-        button:active {
-            transform: scale(0.98);
-        }
+        .btn-analyze { background: var(--auchan-blue); color: white; }
+        .btn-analyze:hover { background: #003d73; }
 
-        .btn-analyze {
-            background: var(--auchan-blue);
-            color: white;
-        }
+        .btn-export { background: #28a745; color: white; }
+        .btn-export:hover { background: #1e7e34; }
 
-        .btn-analyze:hover {
-            background: #003d73;
-        }
+        .btn-history { background: #6c757d; color: white; }
+        .btn-history:hover { background: #5a6268; }
 
-        .btn-export {
-            background: #28a745;
-            color: white;
-        }
+        .btn-load-file { background: #17a2b8; color: white; }
+        .btn-load-file:hover { background: #117a8b; }
 
-        .btn-export:hover {
-            background: #1e7e34;
-        }
-
-        .btn-history {
-            background: #6c757d;
-            color: white;
-        }
-
-        .btn-history:hover {
-            background: #5a6268;
-        }
-
-        .btn-load-file {
-            background: #17a2b8;
-            color: white;
-        }
-
-        .btn-load-file:hover {
-            background: #117a8b;
-        }
-
-        .btn-clear {
-            background: #ddd;
-            color: #333;
-        }
-
-        .btn-clear:hover {
-            background: #ccc;
-        }
+        .btn-clear { background: #ddd; color: #333; }
+        .btn-clear:hover { background: #ccc; }
 
         .results {
             min-height: 150px;
@@ -215,10 +163,7 @@
             gap: 6px;
         }
 
-        .agent-name {
-            font-weight: bold;
-            color: #111;
-        }
+        .agent-name { font-weight: bold; color: #111; }
 
         .agent-info {
             display: flex;
@@ -234,25 +179,11 @@
             font-size: 0.8rem;
         }
 
-        .status-busy {
-            background: var(--alert-busy-bg);
-            color: var(--alert-busy-border);
-        }
+        .status-busy { background: var(--alert-busy-bg); color: var(--alert-busy-border); }
+        .status-wrap { background: var(--alert-wrap-bg); color: var(--alert-wrap-border); }
+        .status-notaccepted { background: var(--alert-notaccepted-bg); color: var(--alert-notaccepted-border); }
 
-        .status-wrap {
-            background: var(--alert-wrap-bg);
-            color: var(--alert-wrap-border);
-        }
-
-        .status-notaccepted {
-            background: var(--alert-notaccepted-bg);
-            color: var(--alert-notaccepted-border);
-        }
-
-        .duration {
-            font-weight: bold;
-            color: #222;
-        }
+        .duration { font-weight: bold; color: #222; }
 
         .no-alert {
             text-align: center;
@@ -279,23 +210,9 @@
             font-weight: bold;
         }
 
-        .notification.success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .notification.info {
-            background: #cce5ff;
-            color: #004085;
-            border: 1px solid #b8daff;
-        }
-
-        .notification.warning {
-            background: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffeeba;
-        }
+        .notification.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .notification.info { background: #cce5ff; color: #004085; border: 1px solid #b8daff; }
+        .notification.warning { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
     </style>
 </head>
 <body>
@@ -310,6 +227,7 @@
             <div class="controls-row">
                 <div class="file-control">
                     <button class="btn-load-file" id="btn-load-file">📂 Historiser</button>
+                    <input type="file" id="hidden-file-input" accept=".json,application/json" style="display:none;">
                     <span id="file-status" style="font-size:12px; color:#666;">Aucun fichier chargé (localStorage)</span>
                 </div>
                 <div class="date-export">
@@ -350,10 +268,13 @@
         </div>
     </div>
 
+    <!-- ✅ FIX : html2canvas chargé correctement AVANT le script principal -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
     <script>
         (function() {
             // ==================== CONSTANTES ====================
-            const STORAGE_KEY = 'wfm_auchan_alert_history'; // fallback localStorage
+            const STORAGE_KEY = 'wfm_auchan_alert_history';
             const SOUND_DURATION = 300;
             const SOUND_FREQUENCY = 880;
 
@@ -364,98 +285,121 @@
             const btnExportCsv = document.getElementById('btn-export-csv');
             const btnHistory = document.getElementById('btn-history');
             const btnLoadFile = document.getElementById('btn-load-file');
+            const btnCapture = document.getElementById('btn-capture');
+            const hiddenFileInput = document.getElementById('hidden-file-input');
             const exportDateInput = document.getElementById('export-date');
             const soundToggle = document.getElementById('sound-toggle');
             const resultsDiv = document.getElementById('results');
             const notificationDiv = document.getElementById('notification');
             const timeSpan = document.getElementById('current-time');
             const fileStatusSpan = document.getElementById('file-status');
-            const btnHistory = document.getElementById('btn-history');
-            const btnCapture = document.getElementById('btn-capture');
 
+            // ✅ FIX : plus de doublon const btnHistory
 
             // Date du jour par défaut
             const today = new Date().toISOString().split('T')[0];
             exportDateInput.value = today;
 
             // ==================== VARIABLES GLOBALES ====================
-            let history = [];               // tableau d'alertes
-            let fileHandle = null;         // handle du fichier JSON si chargé
+            let history = [];
+            let fileHandle = null;
 
             // ==================== FONCTIONS DE PERSISTANCE ====================
-            // Charge l'historique depuis localStorage
             function loadFromLocalStorage() {
                 const stored = localStorage.getItem(STORAGE_KEY);
                 if (!stored) return [];
-                try {
-                    return JSON.parse(stored);
-                } catch (e) {
-                    return [];
-                }
+                try { return JSON.parse(stored); } catch (e) { return []; }
             }
 
-            // Sauvegarde l'historique dans localStorage
             function saveToLocalStorage() {
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
-            }
-
-            // Vérifie si l'API File System Access est disponible
-            function isFileSystemAccessSupported() {
-                return 'showOpenFilePicker' in window && 'showSaveFilePicker' in window;
-            }
-
-            // Charge l'historique depuis un fichier JSON (ou crée un nouveau fichier)
-            async function loadFromFile() {
-                if (!isFileSystemAccessSupported()) {
-                    showNotification('API File System Access non supportée. Utilisation du localStorage.', 'warning');
-                    return;
-                }
                 try {
-                    // Demander à l'utilisateur de choisir un fichier JSON existant
-                    const pickerOpts = {
-                        types: [{
-                            description: 'Fichier JSON',
-                            accept: {'application/json': ['.json']}
-                        }],
-                        multiple: false
-                    };
-                    const handle = await window.showOpenFilePicker(pickerOpts);
-                    fileHandle = handle[0];
-                    const file = await fileHandle.getFile();
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+                } catch (e) {
+                    console.warn('localStorage indisponible :', e);
+                }
+            }
+
+            function isFileSystemAccessSupported() {
+                return typeof window.showOpenFilePicker === 'function' &&
+                       typeof window.showSaveFilePicker === 'function';
+            }
+
+            // ✅ FIX : Historiser fonctionne maintenant partout
+            async function loadFromFile() {
+                // Cas 1 : API moderne disponible → on garde la logique fichier persistant
+                if (isFileSystemAccessSupported()) {
+                    try {
+                        const pickerOpts = {
+                            types: [{
+                                description: 'Fichier JSON',
+                                accept: {'application/json': ['.json']}
+                            }],
+                            multiple: false
+                        };
+                        const handle = await window.showOpenFilePicker(pickerOpts);
+                        fileHandle = handle[0];
+                        const file = await fileHandle.getFile();
+                        const content = await file.text();
+                        history = JSON.parse(content || '[]');
+                        if (!Array.isArray(history)) history = [];
+                        fileStatusSpan.textContent = `Fichier chargé : ${fileHandle.name}`;
+                        showNotification('Historique chargé depuis le fichier.', 'success');
+                        renderHistorySummary();
+                        return;
+                    } catch (err) {
+                        if (err.name === 'AbortError') {
+                            const shouldCreate = confirm('Voulez-vous créer un nouveau fichier JSON ?');
+                            if (shouldCreate) {
+                                try {
+                                    const newHandle = await window.showSaveFilePicker({
+                                        suggestedName: 'historique_alertes_wfm.json',
+                                        types: [{
+                                            description: 'Fichier JSON',
+                                            accept: {'application/json': ['.json']}
+                                        }]
+                                    });
+                                    fileHandle = newHandle;
+                                    history = [];
+                                    await writeToFile();
+                                    fileStatusSpan.textContent = `Fichier créé : ${fileHandle.name}`;
+                                    showNotification('Nouveau fichier créé.', 'success');
+                                    renderHistorySummary();
+                                } catch (e) {
+                                    showNotification('Création annulée.', 'info');
+                                }
+                            }
+                            return;
+                        }
+                        console.error(err);
+                        showNotification('Erreur lors du chargement du fichier.', 'warning');
+                        return;
+                    }
+                }
+
+                // ✅ Cas 2 : Fallback (Firefox, Safari, file://) → input file classique
+                hiddenFileInput.click();
+            }
+
+            // Handler du fallback input file
+            hiddenFileInput.addEventListener('change', async (e) => {
+                const file = e.target.files && e.target.files[0];
+                if (!file) return;
+                try {
                     const content = await file.text();
-                    history = JSON.parse(content || '[]');
-                    fileStatusSpan.textContent = `Fichier chargé : ${fileHandle.name}`;
+                    const parsed = JSON.parse(content || '[]');
+                    history = Array.isArray(parsed) ? parsed : [];
+                    fileHandle = null;
+                    fileStatusSpan.textContent = `Fichier chargé : ${file.name}`;
                     showNotification('Historique chargé depuis le fichier.', 'success');
                     renderHistorySummary();
                 } catch (err) {
-                    // Si l'utilisateur annule, on propose de créer un nouveau fichier
-                    if (err.name === 'AbortError') {
-                        const shouldCreate = confirm('Voulez-vous créer un nouveau fichier JSON ?');
-                        if (shouldCreate) {
-                            try {
-                                const newHandle = await window.showSaveFilePicker({
-                                    suggestedName: 'historique_alertes_wfm.json',
-                                    types: [{
-                                        description: 'Fichier JSON',
-                                        accept: {'application/json': ['.json']}
-                                    }]
-                                });
-                                fileHandle = newHandle;
-                                history = [];
-                                await writeToFile();
-                                fileStatusSpan.textContent = `Fichier créé : ${fileHandle.name}`;
-                                showNotification('Nouveau fichier créé.', 'success');
-                            } catch (e) {
-                                showNotification('Création annulée.', 'info');
-                            }
-                        }
-                    } else {
-                        showNotification('Erreur lors du chargement du fichier.', 'warning');
-                    }
+                    console.error(err);
+                    showNotification('Fichier JSON invalide.', 'warning');
+                } finally {
+                    hiddenFileInput.value = '';
                 }
-            }
+            });
 
-            // Écrit l'historique dans le fichier JSON (si un handle est ouvert)
             async function writeToFile() {
                 if (!fileHandle) return false;
                 try {
@@ -469,7 +413,6 @@
                 }
             }
 
-            // Fonction de sauvegarde : écrit dans le fichier si dispo, sinon localStorage
             async function saveHistory() {
                 if (fileHandle) {
                     const ok = await writeToFile();
@@ -492,7 +435,7 @@
                     { re: /(\d+)\s*w/i, mult: 7 * 86400 },
                     { re: /(\d+)\s*d/i, mult: 86400 },
                     { re: /(\d+)\s*h/i, mult: 3600 },
-                    { re: /(\d+)\s*m/i, mult: 60 },
+                    { re: /(\d+)\s*m(?!o)/i, mult: 60 },
                     { re: /(\d+)\s*s/i, mult: 1 }
                 ];
                 for (const p of patterns) {
@@ -524,7 +467,7 @@
                 const statusDefs = [
                     { keywords: ['Not Accepted', 'Refusé', 'Refuse', 'Not accepted'], type: 'notaccepted' },
                     { keywords: ['Busy'], type: 'busy' },
-                    { keywords: ['Wrap', 'Wrap up', 'Wrap-up', 'ACW'], type: 'wrap' }
+                    { keywords: ['Wrap up', 'Wrap-up', 'Wrap', 'ACW'], type: 'wrap' }
                 ];
 
                 let foundType = null;
@@ -655,7 +598,6 @@
                 }
                 resultsDiv.innerHTML = html;
 
-                // Si alertes > 0, jouer le son et enregistrer dans l'historique
                 if (alerts.length > 0) {
                     playAlertSound();
                     addAlertsToHistory(alerts);
@@ -671,26 +613,33 @@
 
                 alerts.forEach(alert => {
                     history.push({
-                        timestamp: timestamp,
-                        date: date,
-                        time: time,
+                        timestamp,
+                        date,
+                        time,
                         agent: alert.name,
                         status: alert.statusLabel,
                         duration: alert.durationStr
                     });
                 });
 
-                // Sauvegarde asynchrone
                 saveHistory();
+                renderHistorySummary();
             }
 
+            // ✅ FIX : plus de += qui s'accumulait à l'infini
             function renderHistorySummary() {
-                // Optionnel : afficher le nombre d'entrées dans l'historique
-                const count = history.length;
-                fileStatusSpan.textContent += ` (${count} entrées)`;
+                const base = fileHandle
+                    ? `Fichier : ${fileHandle.name}`
+                    : 'Aucun fichier chargé (localStorage)';
+                fileStatusSpan.textContent = `${base} (${history.length} entrées)`;
             }
 
             // ==================== EXPORT CSV ====================
+            function csvEscape(v) {
+                const s = String(v == null ? '' : v);
+                return /[",\n;]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+            }
+
             function exportCSV(date) {
                 const filtered = history.filter(entry => entry.date === date);
                 if (filtered.length === 0) {
@@ -701,7 +650,13 @@
                 const csvRows = [];
                 csvRows.push('Date,Heure,Agent,Statut,Durée');
                 filtered.forEach(entry => {
-                    csvRows.push(`${entry.date},${entry.time},"${entry.agent}",${entry.status},${entry.duration}`);
+                    csvRows.push([
+                        csvEscape(entry.date),
+                        csvEscape(entry.time),
+                        csvEscape(entry.agent),
+                        csvEscape(entry.status),
+                        csvEscape(entry.duration)
+                    ].join(','));
                 });
 
                 const csvContent = csvRows.join('\n');
@@ -709,7 +664,9 @@
                 const link = document.createElement('a');
                 link.href = URL.createObjectURL(blob);
                 link.download = `alertes_wfm_${date}.csv`;
+                document.body.appendChild(link);
                 link.click();
+                document.body.removeChild(link);
                 URL.revokeObjectURL(link.href);
                 showNotification(`Export CSV pour le ${date} téléchargé.`, 'success');
             }
@@ -723,7 +680,13 @@
                 const csvRows = [];
                 csvRows.push('Date,Heure,Agent,Statut,Durée');
                 history.forEach(entry => {
-                    csvRows.push(`${entry.date},${entry.time},"${entry.agent}",${entry.status},${entry.duration}`);
+                    csvRows.push([
+                        csvEscape(entry.date),
+                        csvEscape(entry.time),
+                        csvEscape(entry.agent),
+                        csvEscape(entry.status),
+                        csvEscape(entry.duration)
+                    ].join(','));
                 });
 
                 const csvContent = csvRows.join('\n');
@@ -731,7 +694,9 @@
                 const link = document.createElement('a');
                 link.href = URL.createObjectURL(blob);
                 link.download = `historique_alertes_wfm_complet.csv`;
+                document.body.appendChild(link);
                 link.click();
+                document.body.removeChild(link);
                 URL.revokeObjectURL(link.href);
                 showNotification('Historique complet exporté en CSV.', 'success');
             }
@@ -758,7 +723,7 @@
                     const text = textarea.value;
                     if (text.trim()) {
                         const agents = analyzeText(text);
-                        renderResults(agents);
+                        if (agents.length > 0) renderResults(agents);
                     }
                 }, 100);
             });
@@ -773,63 +738,62 @@
             });
 
             btnHistory.addEventListener('click', exportHistoryCSV);
-
             btnLoadFile.addEventListener('click', loadFromFile);
+
+            // ✅ FIX : Capture écran opérationnelle (html2canvas correctement chargé)
             btnCapture.addEventListener('click', async () => {
                 const results = document.getElementById('results');
 
-            // Vérifier qu'il y a bien un résultat
-               if (!results || results.textContent.includes('En attente du tableau')) {
-                   showNotification('Aucun résultat à capturer.', 'info');
-                   return;
-           }
+                if (!results || results.textContent.includes('En attente du tableau')) {
+                    showNotification('Aucun résultat à capturer.', 'info');
+                    return;
+                }
 
-               try {
-                   showNotification('Capture en cours...', 'info');
+                if (typeof html2canvas === 'undefined') {
+                    showNotification('Bibliothèque de capture non disponible.', 'warning');
+                    return;
+                }
 
-               const canvas = await html2canvas(results, {
-                    backgroundColor: '#F4F6F9',
-                    scale: 2,
-                    useCORS: true,
-                    logging: false
-           });
+                try {
+                    showNotification('Capture en cours...', 'info');
 
-               const link = document.createElement('a');
+                    const canvas = await html2canvas(results, {
+                        backgroundColor: '#F4F6F9',
+                        scale: 2,
+                        useCORS: true,
+                        logging: false
+                    });
 
-               const now = new Date();
-               const date = now.toISOString().slice(0, 10);
-               const time = now.toTimeString().slice(0, 8).replace(/:/g, '-');
+                    const link = document.createElement('a');
+                    const now = new Date();
+                    const date = now.toISOString().slice(0, 10);
+                    const time = now.toTimeString().slice(0, 8).replace(/:/g, '-');
 
-         link.download = `capture_resultat_wfm_${date}_${time}.png`;
-         link.href = canvas.toDataURL('image/png');
+                    link.download = `capture_resultat_wfm_${date}_${time}.png`;
+                    link.href = canvas.toDataURL('image/png');
 
-         document.body.appendChild(link);
-         link.click();
-         document.body.removeChild(link);
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
 
-                  showNotification('📸 Capture téléchargée avec succès.', 'success');
-
-           } catch (error) {
-        console.error('Erreur lors de la capture :', error);
-                  showNotification('Erreur lors de la capture écran.', 'warning');
-           }
-           });
-
+                    showNotification('📸 Capture téléchargée avec succès.', 'success');
+                } catch (error) {
+                    console.error('Erreur lors de la capture :', error);
+                    showNotification('Erreur lors de la capture écran.', 'warning');
+                }
+            });
 
             // Mise à jour de l'heure
             function updateTime() {
-                const now = new Date();
-                timeSpan.textContent = now.toLocaleTimeString();
+                timeSpan.textContent = new Date().toLocaleTimeString();
             }
             updateTime();
             setInterval(updateTime, 1000);
 
-            // Initialisation : charger l'historique depuis localStorage au cas où
+            // Initialisation
             history = loadFromLocalStorage();
             renderHistorySummary();
         })();
-        src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
-
     </script>
 </body>
 </html>
