@@ -132,6 +132,15 @@
             transition: background 0.3s, transform 0.1s;
             font-size: 14px;
         }
+        .btn-capture {
+            background: #8e44ad;
+            color: white;
+        }
+
+        .btn-capture:hover {
+            background: #6c3483;
+        }
+
 
         button:active {
             transform: scale(0.98);
@@ -323,6 +332,7 @@
             <div class="button-group">
                 <button class="btn-analyze" id="btn-analyze">🔍 Analyser</button>
                 <button class="btn-history" id="btn-history">📊 Exporter Historique complet</button>
+                <button class="btn-capture" id="btn-capture">📸 Capture écran</button>
                 <button class="btn-clear" id="btn-clear">🗑️ Effacer</button>
             </div>
 
@@ -360,6 +370,9 @@
             const notificationDiv = document.getElementById('notification');
             const timeSpan = document.getElementById('current-time');
             const fileStatusSpan = document.getElementById('file-status');
+            const btnHistory = document.getElementById('btn-history');
+            const btnCapture = document.getElementById('btn-capture');
+
 
             // Date du jour par défaut
             const today = new Date().toISOString().split('T')[0];
@@ -762,6 +775,46 @@
             btnHistory.addEventListener('click', exportHistoryCSV);
 
             btnLoadFile.addEventListener('click', loadFromFile);
+            btnCapture.addEventListener('click', async () => {
+                const results = document.getElementById('results');
+
+            // Vérifier qu'il y a bien un résultat
+               if (!results || results.textContent.includes('En attente du tableau')) {
+                   showNotification('Aucun résultat à capturer.', 'info');
+                   return;
+           }
+
+               try {
+                   showNotification('Capture en cours...', 'info');
+
+               const canvas = await html2canvas(results, {
+                    backgroundColor: '#F4F6F9',
+                    scale: 2,
+                    useCORS: true,
+                    logging: false
+           });
+
+               const link = document.createElement('a');
+
+               const now = new Date();
+               const date = now.toISOString().slice(0, 10);
+               const time = now.toTimeString().slice(0, 8).replace(/:/g, '-');
+
+         link.download = `capture_resultat_wfm_${date}_${time}.png`;
+         link.href = canvas.toDataURL('image/png');
+
+         document.body.appendChild(link);
+         link.click();
+         document.body.removeChild(link);
+
+                  showNotification('📸 Capture téléchargée avec succès.', 'success');
+
+           } catch (error) {
+        console.error('Erreur lors de la capture :', error);
+                  showNotification('Erreur lors de la capture écran.', 'warning');
+           }
+           });
+
 
             // Mise à jour de l'heure
             function updateTime() {
@@ -775,6 +828,8 @@
             history = loadFromLocalStorage();
             renderHistorySummary();
         })();
+        src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
+
     </script>
 </body>
 </html>
