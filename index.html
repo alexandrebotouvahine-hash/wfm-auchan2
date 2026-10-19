@@ -345,7 +345,7 @@
             </div>
         </div>
         <div class="footer">
-            <p>Alerte : Busy > 8 min | Wrap up > 40 s | Not Accepted<br>
+            <p>Alerte : Busy > 3 min | Wrap up > 40 s | Not Accepted<br>
                 <br>
                 <br>
                 <br>
@@ -615,7 +615,7 @@
 
             function getAlerts(agents) {
                 return agents.filter(a => {
-                    if (a.status === 'busy' && a.durationSec > 480) return true;
+                    if (a.status === 'busy' && a.durationSec > 180) return true;
                     if (a.status === 'wrap' && a.durationSec > 40) return true;
                     if (a.status === 'notaccepted') return true;
                     return false;
