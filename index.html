@@ -120,24 +120,24 @@
         }
 
         .btn-capture { background: #001d3d; color: white; }
-        .btn-capture:hover { background: #001d3d; }
+        .btn-capture:hover { background: #003566; }
 
         button:active { transform: scale(0.98); }
 
-        .btn-analyze { background: #001d3d ; color: white; }
-        .btn-analyze:hover { background: #001d3d; }
+        .btn-analyze { background: #001d3d; color: white; }
+        .btn-analyze:hover { background: #003566; }
 
         .btn-export { background: #001d3d; color: white; }
-        .btn-export:hover { background: #001d3d; }
+        .btn-export:hover { background: #003566; }
 
         .btn-history { background: #001d3d; color: white; }
-        .btn-history:hover { background: #001d3d; }
+        .btn-history:hover { background: #003566; }
 
         .btn-load-file { background: #001d3d; color: white; }
-        .btn-load-file:hover { background: #001d3d; }
+        .btn-load-file:hover { background: #003566; }
 
         .btn-clear { background: #001d3d; color: white; }
-        .btn-clear:hover { background: #001d3d; }
+        .btn-clear:hover { background: #003566; }
 
         .results {
             min-height: 150px;
@@ -186,7 +186,7 @@
 
         .duration { font-weight: bold; color: #222; }
 
-        /* ==================== NOUVEAU : bouton play par agent ==================== */
+        /* Bouton play */
         .btn-play {
             width: 38px;
             height: 38px;
@@ -244,7 +244,7 @@
         .notification.info { background: #cce5ff; color: #004085; border: 1px solid #b8daff; }
         .notification.warning { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
 
-        /* ==================== NOUVEAU : Sync row ==================== */
+        /* Sync row */
         .sync-row {
             display: flex;
             align-items: center;
@@ -281,7 +281,7 @@
         .sync-status.active .sync-dot { background: #28a745; animation: pulse 2s infinite; }
         @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
 
-        /* ==================== OVERLAY DE CAPTURE (style Windows+Shift+S) ==================== */
+        /* Overlay de capture */
         #capture-overlay {
             position: fixed;
             inset: 0;
@@ -289,11 +289,7 @@
             cursor: crosshair;
             background: rgba(0, 0, 0, 0.45);
             user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
         }
-
         #capture-selection {
             position: absolute;
             border: 2px solid #0055A5;
@@ -303,7 +299,6 @@
             box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.45);
             z-index: 1;
         }
-
         #capture-selection::after {
             content: '';
             position: absolute;
@@ -311,108 +306,36 @@
             border: 1px dashed rgba(255, 255, 255, 0.75);
             pointer-events: none;
         }
-
         #capture-selection.success {
             border-color: #28a745;
-            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.45),
-                        0 0 0 4px rgba(40, 167, 69, 0.35),
-                        0 0 24px 6px rgba(40, 167, 69, 0.55);
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.45), 0 0 0 4px rgba(40, 167, 69, 0.35);
         }
-
         #capture-hint {
             position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.88);
-            color: #fff;
-            padding: 12px 22px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-family: "Segoe UI", Arial, sans-serif;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-            pointer-events: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 100000;
-            white-space: nowrap;
+            top: 20px; left: 50%; transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.88); color: #fff;
+            padding: 12px 22px; border-radius: 8px; font-size: 14px;
+            z-index: 100000; pointer-events: none; white-space: nowrap;
         }
-
-        #capture-hint kbd {
-            background: #fff;
-            color: #000;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-family: monospace;
-            font-weight: bold;
-        }
-
+        #capture-hint kbd { background: #fff; color: #000; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
         #capture-toolbar {
-            position: fixed;
-            bottom: 24px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 10px;
-            z-index: 100000;
+            position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 10px; z-index: 100000;
         }
+        #capture-toolbar button { padding: 10px 18px; font-size: 13px; border-radius: 22px; }
 
-        #capture-toolbar button {
-            padding: 10px 18px;
-            font-size: 13px;
-            border-radius: 22px;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
-        }
-
-        /* ==================== NOUVEAU : Modal QR code ==================== */
+        /* Modal QR */
         #qr-modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 100001;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+            position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8);
+            z-index: 100001; display: none; align-items: center; justify-content: center; padding: 20px;
         }
         #qr-modal.show { display: flex; }
         #qr-modal .qr-content {
-            background: white;
-            padding: 24px;
-            border-radius: 12px;
-            text-align: center;
-            max-width: 380px;
-            width: 100%;
+            background: white; padding: 24px; border-radius: 12px;
+            text-align: center; max-width: 380px; width: 100%;
         }
-        #qr-modal h3 {
-            margin-bottom: 8px;
-            color: var(--auchan-dark);
-            font-size: 16px;
-        }
-        #qr-modal .qr-subtitle {
-            font-size: 12px;
-            color: #666;
-            margin-bottom: 16px;
-        }
-        #qr-container {
-            margin: 16px 0;
-            display: flex;
-            justify-content: center;
-            min-height: 280px;
-            align-items: center;
-        }
-        #sync-url-text {
-            font-size: 10px;
-            color: #666;
-            word-break: break-all;
-            margin-bottom: 12px;
-            font-family: monospace;
-            background: #f4f6f9;
-            padding: 8px;
-            border-radius: 6px;
-        }
+        #qr-container { margin: 16px 0; display: flex; justify-content: center; min-height: 280px; align-items: center; }
+        #sync-url-text { font-size: 10px; color: #666; word-break: break-all; margin-bottom: 12px; }
     </style>
 </head>
 <body>
@@ -442,7 +365,6 @@
                 </div>
             </div>
 
-            <!-- ==================== NOUVEAU : Sync inter-appareils ==================== -->
             <div class="sync-row">
                 <label>🔄 Sync :</label>
                 <input type="text" id="sync-code" placeholder="ID de session (auto)">
@@ -469,20 +391,15 @@
             </div>
         </div>
         <div class="footer">
-            <p>Alerte : Busy > 3 min | Wrap up > 40 s | Not Accepted<br>
-                <br>
-                <br>
-                <br>
-                <br>
+            <p>Alerte : Busy > 3 min | Wrap up > 40 s | Not Accepted<br><br><br><br><br>
             &copy; 2026 Work Force Management - Concentrix Madagascar</p>
         </div>
     </div>
 
-    <!-- ==================== NOUVEAU : Modal QR code ==================== -->
     <div id="qr-modal">
         <div class="qr-content">
             <h3>📱 Scanner pour synchroniser</h3>
-            <p class="qr-subtitle">Ouvrez cet URL sur votre téléphone (ou scannez le QR)</p>
+            <p style="font-size:12px; color:#666; margin-bottom:16px;">Ouvrez cet URL sur votre téléphone</p>
             <div id="qr-container">Génération...</div>
             <p id="sync-url-text"></p>
             <button class="btn-clear" id="btn-qr-close">Fermer</button>
@@ -519,32 +436,29 @@
             const notificationDiv = document.getElementById('notification');
             const timeSpan = document.getElementById('current-time');
             const fileStatusSpan = document.getElementById('file-status');
-            // Sync
             const syncCodeInput = document.getElementById('sync-code');
             const btnSyncActivate = document.getElementById('btn-sync-activate');
             const btnSyncDeactivate = document.getElementById('btn-sync-deactivate');
             const btnSyncQR = document.getElementById('btn-sync-qr');
             const syncStatusSpan = document.getElementById('sync-status');
-            // QR modal
             const qrModal = document.getElementById('qr-modal');
             const btnQRClose = document.getElementById('btn-qr-close');
             const qrContainer = document.getElementById('qr-container');
             const syncUrlText = document.getElementById('sync-url-text');
 
-            // Date du jour par défaut
             const today = new Date().toISOString().split('T')[0];
             exportDateInput.value = today;
 
             // ==================== VARIABLES GLOBALES ====================
             let history = [];
             let fileHandle = null;
-            let currentAlerts = [];       // dernier résultat affiché
-            let renderingFromSync = false; // flag pour éviter boucles
+            let currentAlerts = [];
+            let renderingFromSync = false;
             let syncPollTimer = null;
             let syncLastPushTime = 0;
             let lastAnalysisAgentsCount = 0;
 
-            // ==================== FONCTIONS DE PERSISTANCE ====================
+            // ==================== PERSISTANCE LOCALE ====================
             function loadFromLocalStorage() {
                 const stored = localStorage.getItem(STORAGE_KEY);
                 if (!stored) return [];
@@ -552,29 +466,20 @@
             }
 
             function saveToLocalStorage() {
-                try {
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
-                } catch (e) {
-                    console.warn('localStorage indisponible :', e);
-                }
+                try { localStorage.setItem(STORAGE_KEY, JSON.stringify(history)); } catch (e) {}
             }
 
             function isFileSystemAccessSupported() {
-                return typeof window.showOpenFilePicker === 'function' &&
-                       typeof window.showSaveFilePicker === 'function';
+                return typeof window.showOpenFilePicker === 'function';
             }
 
             async function loadFromFile() {
                 if (isFileSystemAccessSupported()) {
                     try {
-                        const pickerOpts = {
-                            types: [{
-                                description: 'Fichier JSON',
-                                accept: {'application/json': ['.json']}
-                            }],
+                        const handle = await window.showOpenFilePicker({
+                            types: [{ description: 'Fichier JSON', accept: {'application/json': ['.json']} }],
                             multiple: false
-                        };
-                        const handle = await window.showOpenFilePicker(pickerOpts);
+                        });
                         fileHandle = handle[0];
                         const file = await fileHandle.getFile();
                         const content = await file.text();
@@ -585,35 +490,9 @@
                         renderHistorySummary();
                         return;
                     } catch (err) {
-                        if (err.name === 'AbortError') {
-                            const shouldCreate = confirm('Voulez-vous créer un nouveau fichier JSON ?');
-                            if (shouldCreate) {
-                                try {
-                                    const newHandle = await window.showSaveFilePicker({
-                                        suggestedName: 'historique_alertes_wfm.json',
-                                        types: [{
-                                            description: 'Fichier JSON',
-                                            accept: {'application/json': ['.json']}
-                                        }]
-                                    });
-                                    fileHandle = newHandle;
-                                    history = [];
-                                    await writeToFile();
-                                    fileStatusSpan.textContent = `Fichier créé : ${fileHandle.name}`;
-                                    showNotification('Nouveau fichier créé.', 'success');
-                                    renderHistorySummary();
-                                } catch (e) {
-                                    showNotification('Création annulée.', 'info');
-                                }
-                            }
-                            return;
-                        }
-                        console.error(err);
-                        showNotification('Erreur lors du chargement du fichier.', 'warning');
-                        return;
+                        if (err.name === 'AbortError') return;
                     }
                 }
-
                 hiddenFileInput.click();
             }
 
@@ -629,50 +508,19 @@
                     showNotification('Historique chargé depuis le fichier.', 'success');
                     renderHistorySummary();
                 } catch (err) {
-                    console.error(err);
                     showNotification('Fichier JSON invalide.', 'warning');
-                } finally {
-                    hiddenFileInput.value = '';
-                }
+                } finally { hiddenFileInput.value = ''; }
             });
 
-            async function writeToFile() {
-                if (!fileHandle) return false;
-                try {
-                    const writable = await fileHandle.createWritable();
-                    await writable.write(JSON.stringify(history, null, 2));
-                    await writable.close();
-                    return true;
-                } catch (err) {
-                    console.error('Erreur écriture fichier :', err);
-                    return false;
-                }
-            }
-
-            async function saveHistory() {
-                if (fileHandle) {
-                    const ok = await writeToFile();
-                    if (!ok) {
-                        showNotification('Erreur écriture fichier. Bascule sur localStorage.', 'warning');
-                        saveToLocalStorage();
-                    }
-                } else {
-                    saveToLocalStorage();
-                }
-            }
-
-            // ==================== FONCTIONS D'ANALYSE ====================
+            // ==================== ANALYSE ====================
             function parseDurationToSeconds(text) {
                 if (!text) return 0;
                 const normalized = text.toLowerCase().replace(/,/g, '');
                 let total = 0;
                 const patterns = [
-                    { re: /(\d+)\s*mo/i, mult: 30 * 86400 },
-                    { re: /(\d+)\s*w/i, mult: 7 * 86400 },
-                    { re: /(\d+)\s*d/i, mult: 86400 },
-                    { re: /(\d+)\s*h/i, mult: 3600 },
-                    { re: /(\d+)\s*m(?!o)/i, mult: 60 },
-                    { re: /(\d+)\s*s/i, mult: 1 }
+                    { re: /(\d+)\s*mo/i, mult: 30 * 86400 }, { re: /(\d+)\s*w/i, mult: 7 * 86400 },
+                    { re: /(\d+)\s*d/i, mult: 86400 }, { re: /(\d+)\s*h/i, mult: 3600 },
+                    { re: /(\d+)\s*m(?!o)/i, mult: 60 }, { re: /(\d+)\s*s/i, mult: 1 }
                 ];
                 for (const p of patterns) {
                     const m = normalized.match(p.re);
@@ -706,18 +554,12 @@
                     { keywords: ['Wrap up', 'Wrap-up', 'Wrap', 'ACW'], type: 'wrap' }
                 ];
 
-                let foundType = null;
-                let foundStatus = '';
-                let idx = -1;
-
+                let foundType = null, foundStatus = '', idx = -1;
                 for (let i = 1; i < lines.length; i++) {
                     for (const def of statusDefs) {
                         for (const kw of def.keywords) {
                             if (lineStartsWithStatus(lines[i], kw)) {
-                                foundType = def.type;
-                                foundStatus = kw;
-                                idx = i;
-                                break;
+                                foundType = def.type; foundStatus = kw; idx = i; break;
                             }
                         }
                         if (foundType) break;
@@ -731,13 +573,7 @@
                 if (!durStr && idx + 1 < lines.length) durStr = extractDuration(lines[idx + 1]);
                 if (!durStr) durStr = '0s';
 
-                return {
-                    name,
-                    status: foundType,
-                    statusLabel: foundStatus,
-                    durationStr: durStr,
-                    durationSec: parseDurationToSeconds(durStr)
-                };
+                return { name, status: foundType, statusLabel: foundStatus, durationStr: durStr, durationSec: parseDurationToSeconds(durStr) };
             }
 
             function analyzeText(text) {
@@ -750,10 +586,7 @@
                 const unique = [];
                 const seen = new Set();
                 for (const n of names) {
-                    if (!seen.has(n.name)) {
-                        seen.add(n.name);
-                        unique.push(n);
-                    }
+                    if (!seen.has(n.name)) { seen.add(n.name); unique.push(n); }
                 }
                 unique.sort((a, b) => a.index - b.index);
 
@@ -761,8 +594,7 @@
                 for (let i = 0; i < unique.length; i++) {
                     const start = unique[i].index;
                     const end = i + 1 < unique.length ? unique[i + 1].index : text.length;
-                    const block = text.substring(start, end);
-                    const parsed = parseBlock(block);
+                    const parsed = parseBlock(text.substring(start, end));
                     if (parsed) agents.push(parsed);
                 }
                 return agents;
@@ -777,15 +609,13 @@
                 });
             }
 
-            // ==================== NOTIFICATION & SON ====================
+            // ==================== NOTIFICATIONS & SONS ====================
             function showNotification(message, type = 'info') {
                 notificationDiv.style.display = 'block';
                 notificationDiv.textContent = message;
                 notificationDiv.className = 'notification ' + type;
                 clearTimeout(notificationDiv._timeout);
-                notificationDiv._timeout = setTimeout(() => {
-                    notificationDiv.style.display = 'none';
-                }, 3500);
+                notificationDiv._timeout = setTimeout(() => { notificationDiv.style.display = 'none'; }, 3500);
             }
 
             function playAlertSound() {
@@ -794,75 +624,22 @@
                     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
                     const oscillator = audioContext.createOscillator();
                     const gainNode = audioContext.createGain();
-                    oscillator.connect(gainNode);
-                    gainNode.connect(audioContext.destination);
-                    oscillator.frequency.value = SOUND_FREQUENCY;
-                    oscillator.type = 'sine';
+                    oscillator.connect(gainNode); gainNode.connect(audioContext.destination);
+                    oscillator.frequency.value = SOUND_FREQUENCY; oscillator.type = 'sine';
                     gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
                     gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + SOUND_DURATION / 1000);
                     oscillator.start(audioContext.currentTime);
                     oscillator.stop(audioContext.currentTime + SOUND_DURATION / 1000);
-                } catch (e) {
-                    console.warn('Impossible de jouer le son.', e);
-                }
+                } catch (e) {}
             }
 
-            // ==================== SYNTHÈSE VOCALE (style aéroport) ====================
-            let voicesLoaded = false;
-            function ensureVoicesLoaded() {
-                if (voicesLoaded || !('speechSynthesis' in window)) return;
-                const load = () => {
-                    if (window.speechSynthesis.getVoices().length > 0) {
-                        voicesLoaded = true;
-                    }
-                };
-                load();
-                window.speechSynthesis.addEventListener('voiceschanged', () => {
-                    load();
-                });
-            }
-
-            function pickFrenchVoice() {
-                if (!('speechSynthesis' in window)) return null;
-                const voices = window.speechSynthesis.getVoices();
-                if (!voices.length) return null;
-
-                const frenchVoices = voices.filter(v =>
-                    v.lang && v.lang.toLowerCase().startsWith('fr')
-                );
-
-                // Voix "aéroport" idéales : féminines, claires, formelles
-                const preferred = [
-                    'Amelie', 'Amélie', 'Audrey', 'Marie', 'Julie',
-                    'Google français', 'Microsoft Julie', 'Microsoft Hortense',
-                    'Thomas', 'Microsoft Paul', 'Google français'
-                ];
-
-                for (const name of preferred) {
-                    const v = frenchVoices.find(v => v.name.includes(name));
-                    if (v) return v;
-                }
-
-                // Fallback : préférer voix féminine
-                const female = frenchVoices.find(v =>
-                    /female|femme|femelle/i.test(v.name)
-                );
-                if (female) return female;
-
-                return frenchVoices[0] || null;
-            }
-
+            // ==================== SYNTHÈSE VOCALE ====================
             function extractFirstName(fullName) {
                 if (!fullName) return '';
-                // Retire le matricule WEB_PSTxxx_xx
                 const cleaned = fullName.replace(/\s*WEB_PST\d+_\d+\s*$/i, '').trim();
                 const parts = cleaned.split(/\s+/).filter(Boolean);
                 if (!parts.length) return cleaned;
-
-                // Si la première partie est "DMT", on prend la suivante
-                if (parts.length >= 2 && /^DMT$/i.test(parts[0])) {
-                    return parts[1];
-                }
+                if (parts.length >= 2 && /^DMT$/i.test(parts[0])) return parts[1];
                 return parts[0];
             }
 
@@ -873,18 +650,9 @@
                 const m = durStr.match(/(\d+)\s*m(?!o)/i);
                 const s = durStr.match(/(\d+)\s*s/i);
 
-                if (h) {
-                    const n = parseInt(h[1], 10);
-                    if (n > 0) parts.push(`${n} ${n === 1 ? 'heure' : 'heures'}`);
-                }
-                if (m) {
-                    const n = parseInt(m[1], 10);
-                    if (n > 0) parts.push(`${n} ${n === 1 ? 'minute' : 'minutes'}`);
-                }
-                if (s) {
-                    const n = parseInt(s[1], 10);
-                    if (n > 0) parts.push(`${n} ${n === 1 ? 'seconde' : 'secondes'}`);
-                }
+                if (h) { const n = parseInt(h[1], 10); if (n > 0) parts.push(`${n} ${n === 1 ? 'heure' : 'heures'}`); }
+                if (m) { const n = parseInt(m[1], 10); if (n > 0) parts.push(`${n} ${n === 1 ? 'minute' : 'minutes'}`); }
+                if (s) { const n = parseInt(s[1], 10); if (n > 0) parts.push(`${n} ${n === 1 ? 'seconde' : 'secondes'}`); }
                 return parts.length ? parts.join(' ') : 'zéro seconde';
             }
 
@@ -893,59 +661,39 @@
                     showNotification('Synthèse vocale non disponible sur ce navigateur.', 'warning');
                     return;
                 }
-
-                // Annule toute lecture en cours
                 try { window.speechSynthesis.cancel(); } catch (e) {}
 
-                // Réinitialise les états des boutons
                 document.querySelectorAll('.btn-play').forEach(b => {
-                    b.classList.remove('speaking');
-                    b.textContent = '▶';
+                    b.classList.remove('speaking'); b.textContent = '▶';
                 });
 
                 const firstName = extractFirstName(agent.name);
                 const durationSpeech = durationToSpeech(agent.durationStr);
-
-                // Structure "aéroport" : pauses naturelles avec points
                 const text = `DMT. ${firstName}. ${durationSpeech}.`;
 
                 const utterance = new SpeechSynthesisUtterance(text);
                 utterance.lang = 'fr-FR';
-                utterance.rate = 0.88;   // ralenti comme annonce aéroport
-                utterance.pitch = 1.0;   // neutre, clair
+                utterance.rate = 0.88; // Ralenti "aéroport"
+                utterance.pitch = 1.0;
                 utterance.volume = 1.0;
 
-                const voice = pickFrenchVoice();
-                if (voice) utterance.voice = voice;
+                const voices = window.speechSynthesis.getVoices();
+                const frVoice = voices.find(v => v.lang.includes('fr') && (v.name.includes('Amelie') || v.name.includes('Audrey') || v.name.includes('Google'))) || voices.find(v => v.lang.includes('fr'));
+                if (frVoice) utterance.voice = frVoice;
 
                 utterance.onstart = () => {
-                    if (btnEl) {
-                        btnEl.classList.add('speaking');
-                        btnEl.textContent = '⏸';
-                    }
+                    if (btnEl) { btnEl.classList.add('speaking'); btnEl.textContent = '⏸'; }
                 };
                 const end = () => {
-                    if (btnEl) {
-                        btnEl.classList.remove('speaking');
-                        btnEl.textContent = '▶';
-                    }
+                    if (btnEl) { btnEl.classList.remove('speaking'); btnEl.textContent = '▶'; }
                 };
                 utterance.onend = end;
-                utterance.onerror = (e) => {
-                    console.warn('Erreur synthèse vocale :', e);
-                    end();
-                };
+                utterance.onerror = end;
 
-                try {
-                    window.speechSynthesis.speak(utterance);
-                } catch (e) {
-                    console.error(e);
-                    showNotification('Erreur lors de la lecture vocale.', 'warning');
-                    end();
-                }
+                window.speechSynthesis.speak(utterance);
             }
 
-            // ==================== RENDU DES RÉSULTATS ====================
+            // ==================== RENDU ====================
             function renderAlerts(alerts, agentsCount, options = {}) {
                 currentAlerts = alerts;
                 lastAnalysisAgentsCount = agentsCount;
@@ -954,7 +702,7 @@
                 let html = `<div class="summary">${summaryPrefix}🚨 ${alerts.length} alertes (${agentsCount} agents analysés)</div>`;
 
                 if (agentsCount === 0) {
-                    html += `<div class="no-alert">Aucun agent trouvé dans le texte collé.</div>`;
+                    html += `<div class="no-alert">Aucun agent trouvé. Vérifiez que le texte contient bien les matricules (ex: WEB_PST123_45).</div>`;
                 } else if (alerts.length === 0) {
                     html += `<div class="no-alert">Aucun dépassement de seuil.</div>`;
                 } else {
@@ -963,17 +711,13 @@
                         if (a.status === 'wrap') statusClass = 'status-wrap';
                         else if (a.status === 'notaccepted') statusClass = 'status-notaccepted';
 
-                        const safeName = String(a.name || '').replace(/</g, '&lt;');
-                        const safeStatus = String(a.statusLabel || '').replace(/</g, '&lt;');
-                        const safeDur = String(a.durationStr || '').replace(/</g, '&lt;');
-
                         html += `
                             <div class="agent-card">
-                                <div class="agent-name">${safeName}</div>
+                                <div class="agent-name">${String(a.name).replace(/</g, '&lt;')}</div>
                                 <div class="agent-info">
-                                    <span class="status-badge ${statusClass}">${safeStatus}</span>
-                                    <span class="duration"> ${safeDur}</span>
-                                    <button class="btn-play" data-idx="${idx}" title="Écouter" aria-label="Écouter">▶</button>
+                                    <span class="status-badge ${statusClass}">${String(a.statusLabel).replace(/</g, '&lt;')}</span>
+                                    <span class="duration"> ${String(a.durationStr).replace(/</g, '&lt;')}</span>
+                                    <button class="btn-play" data-idx="${idx}" title="Écouter">▶</button>
                                 </div>
                             </div>
                         `;
@@ -981,12 +725,10 @@
                 }
                 resultsDiv.innerHTML = html;
 
-                // Attache les écouteurs sur les boutons play
                 resultsDiv.querySelectorAll('.btn-play').forEach(btn => {
                     btn.addEventListener('click', (e) => {
                         e.stopPropagation();
-                        const idx = parseInt(btn.dataset.idx, 10);
-                        const agent = alerts[idx];
+                        const agent = alerts[parseInt(btn.dataset.idx, 10)];
                         if (agent) speakAlert(agent, btn);
                     });
                 });
@@ -1003,7 +745,7 @@
                 }
             }
 
-            // ==================== GESTION DE L'HISTORIQUE ====================
+            // ==================== HISTORIQUE & EXPORT ====================
             function addAlertsToHistory(alerts) {
                 const now = new Date();
                 const timestamp = now.toISOString();
@@ -1011,28 +753,17 @@
                 const time = now.toLocaleTimeString();
 
                 alerts.forEach(alert => {
-                    history.push({
-                        timestamp,
-                        date,
-                        time,
-                        agent: alert.name,
-                        status: alert.statusLabel,
-                        duration: alert.durationStr
-                    });
+                    history.push({ timestamp, date, time, agent: alert.name, status: alert.statusLabel, duration: alert.durationStr });
                 });
-
-                saveHistory();
+                saveToLocalStorage(); // On utilise toujours le localStorage pour la fiabilité
                 renderHistorySummary();
             }
 
             function renderHistorySummary() {
-                const base = fileHandle
-                    ? `Fichier : ${fileHandle.name}`
-                    : 'Aucun fichier chargé (localStorage)';
+                const base = fileHandle ? `Fichier : ${fileHandle.name}` : 'Aucun fichier chargé (localStorage)';
                 fileStatusSpan.textContent = `${base} (${history.length} entrées)`;
             }
 
-            // ==================== EXPORT CSV ====================
             function csvEscape(v) {
                 const s = String(v == null ? '' : v);
                 return /[",\n;]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
@@ -1040,71 +771,39 @@
 
             function exportCSV(date) {
                 const filtered = history.filter(entry => entry.date === date);
-                if (filtered.length === 0) {
-                    showNotification('Aucune alerte enregistrée pour cette date.', 'info');
-                    return;
-                }
+                if (filtered.length === 0) return showNotification('Aucune alerte enregistrée pour cette date.', 'info');
 
-                const csvRows = [];
-                csvRows.push('Date,Heure,Agent,Statut,Durée');
-                filtered.forEach(entry => {
-                    csvRows.push([
-                        csvEscape(entry.date),
-                        csvEscape(entry.time),
-                        csvEscape(entry.agent),
-                        csvEscape(entry.status),
-                        csvEscape(entry.duration)
-                    ].join(','));
+                const csvRows = ['Date,Heure,Agent,Statut,Durée'];
+                filtered.forEach(e => {
+                    csvRows.push([csvEscape(e.date), csvEscape(e.time), csvEscape(e.agent), csvEscape(e.status), csvEscape(e.duration)].join(','));
                 });
 
-                const csvContent = csvRows.join('\n');
-                const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = `alertes_wfm_${date}.csv`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                URL.revokeObjectURL(link.href);
+                downloadCSV(csvRows.join('\n'), `alertes_wfm_${date}.csv`);
                 showNotification(`Export CSV pour le ${date} téléchargé.`, 'success');
             }
 
             function exportHistoryCSV() {
-                if (history.length === 0) {
-                    showNotification('Aucun historique disponible.', 'info');
-                    return;
-                }
-
-                const csvRows = [];
-                csvRows.push('Date,Heure,Agent,Statut,Durée');
-                history.forEach(entry => {
-                    csvRows.push([
-                        csvEscape(entry.date),
-                        csvEscape(entry.time),
-                        csvEscape(entry.agent),
-                        csvEscape(entry.status),
-                        csvEscape(entry.duration)
-                    ].join(','));
+                if (history.length === 0) return showNotification('Aucun historique disponible.', 'info');
+                const csvRows = ['Date,Heure,Agent,Statut,Durée'];
+                history.forEach(e => {
+                    csvRows.push([csvEscape(e.date), csvEscape(e.time), csvEscape(e.agent), csvEscape(e.status), csvEscape(e.duration)].join(','));
                 });
-
-                const csvContent = csvRows.join('\n');
-                const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' });
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = `historique_alertes_wfm_complet.csv`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                URL.revokeObjectURL(link.href);
+                downloadCSV(csvRows.join('\n'), `historique_alertes_wfm_complet.csv`);
                 showNotification('Historique complet exporté en CSV.', 'success');
             }
 
-            // ====================================================================
-            // ==================== SYNC INTER-APPAREILS (jsonblob.com) ============
-            // ====================================================================
-            function isSyncActive() {
-                return !!localStorage.getItem(SYNC_ID_KEY);
+            function downloadCSV(content, filename) {
+                const blob = new Blob(["\uFEFF" + content], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
             }
+
+            // ==================== SYNC INTER-APPAREILS ====================
+            function isSyncActive() { return !!localStorage.getItem(SYNC_ID_KEY); }
 
             function updateSyncUI() {
                 const active = isSyncActive();
@@ -1120,27 +819,33 @@
                 }
             }
 
-            async function createSyncSession() {
+            async function activateSync() {
+                const manualId = (syncCodeInput.value || '').trim();
+                if (manualId) {
+                    try {
+                        const resp = await fetch(`${JSONBLOB_BASE}/${manualId}`);
+                        if (!resp.ok) throw new Error();
+                        localStorage.setItem(SYNC_ID_KEY, manualId);
+                        syncCodeInput.value = '';
+                        showNotification('Session rejointe.', 'success');
+                        updateSyncUI(); startSyncPolling(); pullFromSync();
+                    } catch (e) { showNotification('ID introuvable.', 'warning'); }
+                    return;
+                }
+
+                showNotification('Création de la session...', 'info');
                 try {
                     const resp = await fetch(JSONBLOB_BASE, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                        body: JSON.stringify({
-                            history: history,
-                            currentAlerts: currentAlerts,
-                            agentsCount: lastAnalysisAgentsCount,
-                            updatedAt: Date.now()
-                        })
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ history, currentAlerts, agentsCount: lastAnalysisAgentsCount, updatedAt: Date.now() })
                     });
-                    if (!resp.ok) throw new Error('HTTP ' + resp.status);
                     const location = resp.headers.get('Location');
-                    if (!location) throw new Error('Pas de Location header');
+                    if (!location) throw new Error();
                     const id = location.split('/').pop();
-                    return id;
-                } catch (err) {
-                    console.error('Création sync échouée :', err);
-                    return null;
-                }
+                    localStorage.setItem(SYNC_ID_KEY, id);
+                    updateSyncUI(); startSyncPolling();
+                    showNotification('Session créée. Cliquez sur 📱 QR.', 'success');
+                } catch (e) { showNotification('Erreur de création. Vérifiez la connexion.', 'warning'); }
             }
 
             async function pushToSync() {
@@ -1149,32 +854,10 @@
                 try {
                     syncLastPushTime = Date.now();
                     await fetch(`${JSONBLOB_BASE}/${id}`, {
-                        method: 'PUT',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            history: history,
-                            currentAlerts: currentAlerts,
-                            agentsCount: lastAnalysisAgentsCount,
-                            updatedAt: syncLastPushTime
-                        })
+                        method: 'PUT', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ history, currentAlerts, agentsCount: lastAnalysisAgentsCount, updatedAt: syncLastPushTime })
                     });
-                } catch (err) {
-                    console.warn('Push sync échoué :', err);
-                }
-            }
-
-            function mergeHistory(remoteHistory) {
-                const key = e => `${e.timestamp}|${e.agent}|${e.status}|${e.duration}`;
-                const existing = new Set(history.map(key));
-                let added = 0;
-                remoteHistory.forEach(e => {
-                    if (e && !existing.has(key(e))) {
-                        history.push(e);
-                        existing.add(key(e));
-                        added++;
-                    }
-                });
-                return added;
+                } catch (e) {}
             }
 
             async function pullFromSync() {
@@ -1186,282 +869,197 @@
                     const data = await resp.json();
                     if (!data) return;
 
-                    // Merge history
                     if (Array.isArray(data.history)) {
-                        const added = mergeHistory(data.history);
-                        if (added > 0) {
-                            saveToLocalStorage();
-                            renderHistorySummary();
-                        }
+                        const key = e => `${e.timestamp}|${e.agent}|${e.status}|${e.duration}`;
+                        const existing = new Set(history.map(key));
+                        let added = 0;
+                        data.history.forEach(e => { if (e && !existing.has(key(e))) { history.push(e); existing.add(key(e)); added++; } });
+                        if (added > 0) { saveToLocalStorage(); renderHistorySummary(); }
                     }
 
-                    // Rendu des alertes distantes si plus récentes
-                    if (Array.isArray(data.currentAlerts) &&
-                        typeof data.updatedAt === 'number' &&
-                        data.updatedAt > syncLastPushTime) {
-
-                        const prevRendering = renderingFromSync;
+                    if (Array.isArray(data.currentAlerts) && typeof data.updatedAt === 'number' && data.updatedAt > syncLastPushTime) {
                         renderingFromSync = true;
-                        try {
-                            renderAlerts(
-                                data.currentAlerts,
-                                typeof data.agentsCount === 'number' ? data.agentsCount : data.currentAlerts.length,
-                                { fromSync: true }
-                            );
-                        } finally {
-                            renderingFromSync = prevRendering;
-                        }
-
-                        // Push nos nouvelles histoires locales si on en a ajouté
-                        const localExtras = history.filter(e =>
-                            !(data.history || []).some(r =>
-                                r.timestamp === e.timestamp &&
-                                r.agent === e.agent &&
-                                r.status === e.status &&
-                                r.duration === e.duration
-                            )
-                        );
-                        if (localExtras.length > 0) {
-                            setTimeout(() => pushToSync(), 500);
-                        }
+                        try { renderAlerts(data.currentAlerts, data.agentsCount || data.currentAlerts.length, { fromSync: true }); } finally { renderingFromSync = false; }
                     }
-                } catch (err) {
-                    console.warn('Pull sync échoué :', err);
-                }
+                } catch (e) {}
             }
 
-            function startSyncPolling() {
-                if (syncPollTimer) return;
-                syncPollTimer = setInterval(pullFromSync, SYNC_POLL_INTERVAL);
-            }
-
-            function stopSyncPolling() {
-                if (syncPollTimer) {
-                    clearInterval(syncPollTimer);
-                    syncPollTimer = null;
-                }
-            }
-
-            async function activateSync() {
-                const manualId = (syncCodeInput.value || '').trim();
-
-                if (manualId) {
-                    // Rejoindre une session existante
-                    try {
-                        const resp = await fetch(`${JSONBLOB_BASE}/${manualId}`);
-                        if (!resp.ok) throw new Error('Session introuvable');
-                        localStorage.setItem(SYNC_ID_KEY, manualId);
-                        syncCodeInput.value = '';
-                        showNotification('Session rejointe.', 'success');
-                        updateSyncUI();
-                        startSyncPolling();
-                        pullFromSync();
-                    } catch (err) {
-                        showNotification('ID de session introuvable ou invalide.', 'warning');
-                    }
-                    return;
-                }
-
-                // Créer une nouvelle session
-                showNotification('Création de la session...', 'info');
-                const id = await createSyncSession();
-                if (!id) {
-                    showNotification('Impossible de créer la session. Vérifiez votre connexion.', 'warning');
-                    return;
-                }
-                localStorage.setItem(SYNC_ID_KEY, id);
-                updateSyncUI();
-                startSyncPolling();
-                showNotification('Session créée. Cliquez sur 📱 QR pour connecter le téléphone.', 'success');
-            }
-
-            function deactivateSync() {
-                localStorage.removeItem(SYNC_ID_KEY);
-                stopSyncPolling();
-                updateSyncUI();
-                showNotification('Sync désactivée.', 'info');
-            }
+            function startSyncPolling() { if (!syncPollTimer) syncPollTimer = setInterval(pullFromSync, SYNC_POLL_INTERVAL); }
+            function stopSyncPolling() { if (syncPollTimer) { clearInterval(syncPollTimer); syncPollTimer = null; } }
+            function deactivateSync() { localStorage.removeItem(SYNC_ID_KEY); stopSyncPolling(); updateSyncUI(); showNotification('Sync désactivée.', 'info'); }
 
             async function showQRCode() {
                 const id = localStorage.getItem(SYNC_ID_KEY);
-                if (!id) {
-                    showNotification('Aucune session active.', 'info');
-                    return;
-                }
+                if (!id) return;
+                if (!window.QRCode) return showNotification('Bibliothèque QR non disponible.', 'warning');
 
-                if (!window.QRCode) {
-                    showNotification('Bibliothèque QR non disponible.', 'warning');
-                    return;
-                }
-
-                const baseUrl = location.href.split('#')[0];
-                const syncUrl = `${baseUrl}#sync=${id}`;
-
+                const syncUrl = `${location.href.split('#')[0]}#sync=${id}`;
                 qrContainer.innerHTML = 'Génération...';
                 syncUrlText.textContent = syncUrl;
 
-                if (location.protocol === 'file:') {
-                    showNotification('Le QR ne fonctionnera pas depuis file://. Hébergez le site sur un serveur web.', 'warning');
-                }
-
                 try {
-                    const dataUrl = await window.QRCode.toDataURL(syncUrl, {
-                        width: 280,
-                        margin: 2,
-                        color: { dark: '#001d3d', light: '#ffffff' }
-                    });
+                    const dataUrl = await window.QRCode.toDataURL(syncUrl, { width: 280, margin: 2, color: { dark: '#001d3d', light: '#ffffff' } });
                     qrContainer.innerHTML = `<img src="${dataUrl}" alt="QR" style="width:280px;height:280px;display:block;">`;
-                } catch (err) {
-                    console.error('QR gen échoué :', err);
-                    qrContainer.textContent = 'Erreur de génération QR';
-                }
-
+                } catch (e) { qrContainer.textContent = 'Erreur QR'; }
                 qrModal.classList.add('show');
             }
 
             function checkSyncURLHash() {
-                const hash = location.hash || '';
-                const m = hash.match(/sync=([A-Za-z0-9-]+)/);
+                const m = (location.hash || '').match(/sync=([A-Za-z0-9-]+)/);
                 if (m) {
-                    const id = m[1];
-                    localStorage.setItem(SYNC_ID_KEY, id);
-                    updateSyncUI();
-                    startSyncPolling();
-                    pullFromSync();
+                    localStorage.setItem(SYNC_ID_KEY, m[1]);
+                    updateSyncUI(); startSyncPolling(); pullFromSync();
                     showNotification('Session sync activée via URL.', 'success');
-                    // Nettoie le hash
-                    try {
-                        history.replaceState(null, '', location.pathname + location.search);
-                    } catch (e) {}
+                    try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
                 }
             }
 
-            // ====================================================================
-            // ==================== CAPTURE ÉCRAN (style Windows+Shift+S) =========
-            // ====================================================================
+            // ==================== CAPTURE ÉCRAN ====================
             let captureActive = false;
-
-            function raf2() {
-                return new Promise(resolve =>
-                    requestAnimationFrame(() => requestAnimationFrame(resolve))
-                );
-            }
-
-            function clamp(v, min, max) {
-                return Math.max(min, Math.min(max, v));
-            }
-
-            function downloadCanvas(canvas) {
-                const link = document.createElement('a');
-                const now = new Date();
-                const date = now.toISOString().slice(0, 10);
-                const time = now.toTimeString().slice(0, 8).replace(/:/g, '-');
-                link.download = `capture_resultat_wfm_${date}_${time}.png`;
-                link.href = canvas.toDataURL('image/png');
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            }
+            function raf2() { return new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))); }
+            function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
 
             async function copyCanvasToClipboard(canvas) {
-                const hasClipboardAPI =
-                    window.isSecureContext &&
-                    navigator.clipboard &&
-                    typeof window.ClipboardItem !== 'undefined' &&
-                    typeof navigator.clipboard.write === 'function';
-
-                if (!hasClipboardAPI) {
-                    downloadCanvas(canvas);
-                    showNotification('📸 Presse-papier indisponible : capture téléchargée.', 'info');
-                    return;
+                if (!window.isSecureContext || !navigator.clipboard || !window.ClipboardItem) {
+                    const link = document.createElement('a'); link.download = `capture_wfm_${Date.now()}.png`;
+                    link.href = canvas.toDataURL('image/png'); link.click();
+                    return showNotification('📸 Capture téléchargée.', 'info');
                 }
-
                 try {
-                    const blob = await new Promise((resolve, reject) => {
-                        canvas.toBlob(b => b ? resolve(b) : reject(new Error('Blob vide')), 'image/png');
-                    });
-
-                    await navigator.clipboard.write([
-                        new ClipboardItem({ 'image/png': blob })
-                    ]);
-
-                    showNotification('📸 Capture copiée dans le presse-papier (Ctrl+V pour coller).', 'success');
-                } catch (err) {
-                    console.warn('Échec de la copie presse-papier :', err);
-                    downloadCanvas(canvas);
-                    showNotification('📸 Capture téléchargée (presse-papier refusé par le navigateur).', 'info');
+                    const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
+                    await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+                    showNotification('📸 Capture copiée dans le presse-papier.', 'success');
+                } catch (e) {
+                    const link = document.createElement('a'); link.download = `capture_wfm_${Date.now()}.png`;
+                    link.href = canvas.toDataURL('image/png'); link.click();
                 }
             }
 
-            async function captureRegion(viewLeft, viewTop, viewWidth, viewHeight) {
+            async function captureRegion(l, t, w, h) {
                 const scale = Math.max(window.devicePixelRatio || 1, 2);
-                const scrollX = window.scrollX || window.pageXOffset || 0;
-                const scrollY = window.scrollY || window.pageYOffset || 0;
+                const sx = window.scrollX, sy = window.scrollY;
+                const full = await html2canvas(document.body, { scale, useCORS: true, logging: false, scrollX: -sx, scrollY: -sy });
 
-                const fullCanvas = await html2canvas(document.body, {
-                    backgroundColor: '#F4F6F9',
-                    scale: scale,
-                    useCORS: true,
-                    allowTaint: true,
-                    logging: false,
-                    scrollX: -scrollX,
-                    scrollY: -scrollY,
-                    windowWidth: document.documentElement.clientWidth,
-                    windowHeight: document.documentElement.clientHeight
-                });
-
-                const srcX = Math.round((viewLeft + scrollX) * scale);
-                const srcY = Math.round((viewTop + scrollY) * scale);
-                const srcW = Math.round(viewWidth * scale);
-                const srcH = Math.round(viewHeight * scale);
-
-                const cx = clamp(srcX, 0, Math.max(0, fullCanvas.width - 1));
-                const cy = clamp(srcY, 0, Math.max(0, fullCanvas.height - 1));
-                const cw = clamp(srcW, 1, fullCanvas.width - cx);
-                const ch = clamp(srcH, 1, fullCanvas.height - cy);
+                const cx = clamp(Math.round((l + sx) * scale), 0, full.width - 1);
+                const cy = clamp(Math.round((t + sy) * scale), 0, full.height - 1);
+                const cw = clamp(Math.round(w * scale), 1, full.width - cx);
+                const ch = clamp(Math.round(h * scale), 1, full.height - cy);
 
                 const out = document.createElement('canvas');
-                out.width = cw;
-                out.height = ch;
-                const ctx = out.getContext('2d');
-                ctx.fillStyle = '#F4F6F9';
-                ctx.fillRect(0, 0, cw, ch);
-                ctx.drawImage(fullCanvas, cx, cy, cw, ch, 0, 0, cw, ch);
-
+                out.width = cw; out.height = ch;
+                out.getContext('2d').drawImage(full, cx, cy, cw, ch, 0, 0, cw, ch);
                 return out;
             }
 
             function startScreenCapture() {
-                if (captureActive) return;
-
-                if (typeof html2canvas === 'undefined') {
-                    showNotification('Bibliothèque de capture non disponible.', 'warning');
-                    return;
-                }
-
-                if (!resultsDiv || resultsDiv.textContent.includes('En attente du tableau')) {
-                    showNotification('Aucun résultat à capturer.', 'info');
-                    return;
-                }
-
+                if (captureActive || typeof html2canvas === 'undefined') return;
+                if (!resultsDiv || resultsDiv.textContent.includes('En attente')) return showNotification('Aucun résultat à capturer.', 'info');
                 captureActive = true;
 
-                const prevBodyUserSelect = document.body.style.userSelect;
-                document.body.style.userSelect = 'none';
+                const overlay = document.createElement('div'); overlay.id = 'capture-overlay';
+                const selection = document.createElement('div'); selection.id = 'capture-selection'; overlay.appendChild(selection);
+                const hint = document.createElement('div'); hint.id = 'capture-hint'; hint.innerHTML = '📸 Sélectionnez la zone <kbd>ESC</kbd>';
+                const toolbar = document.createElement('div'); toolbar.id = 'capture-toolbar';
+                const btnRes = document.createElement('button'); btnRes.className = 'btn-analyze'; btnRes.textContent = '📋 Résultats';
+                const btnCan = document.createElement('button'); btnCan.className = 'btn-clear'; btnCan.textContent = '✖ Annuler';
+                toolbar.appendChild(btnRes); toolbar.appendChild(btnCan);
 
-                const overlay = document.createElement('div');
-                overlay.id = 'capture-overlay';
+                document.body.append(overlay, hint, toolbar);
 
-                const selection = document.createElement('div');
-                selection.id = 'capture-selection';
+                let sX = 0, sY = 0, drawing = false;
 
-                overlay.appendChild(selection);
+                const cleanup = () => {
+                    captureActive = false; overlay.remove(); hint.remove(); toolbar.remove();
+                    document.removeEventListener('keydown', escH, true);
+                };
+                const escH = (e) => { if (e.key === 'Escape') { cleanup(); showNotification('Annulé.', 'info'); } };
+                document.addEventListener('keydown', escH, true);
 
-                const hint = document.createElement('div');
-                hint.id = 'capture-hint';
-                hint.innerHTML = '📸 Sélectionnez la zone à copier &nbsp;•&nbsp; <kbd>ESC</kbd> pour annuler';
+                overlay.addEventListener('mousedown', e => {
+                    drawing = true; sX = e.clientX; sY = e.clientY;
+                    selection.style.display = 'block'; selection.classList.remove('success');
+                });
+                overlay.addEventListener('mousemove', e => {
+                    if (!drawing) return;
+                    Object.assign(selection.style, {
+                        left: Math.min(sX, e.clientX) + 'px', top: Math.min(sY, e.clientY) + 'px',
+                        width: Math.abs(e.clientX - sX) + 'px', height: Math.abs(e.clientY - sY) + 'px'
+                    });
+                });
+                overlay.addEventListener('mouseup', async e => {
+                    if (!drawing) return; drawing = false;
+                    const r = selection.getBoundingClientRect();
+                    if (r.width < 10 || r.height < 10) { selection.style.display = 'none'; return; }
+                    selection.classList.add('success');
+                    overlay.style.display = 'none'; hint.style.display = 'none'; toolbar.style.display = 'none';
+                    await raf2();
+                    try {
+                        const canvas = await captureRegion(r.left, r.top, r.width, r.height);
+                        cleanup(); await copyCanvasToClipboard(canvas);
+                    } catch (err) { cleanup(); showNotification('Erreur capture.', 'warning'); }
+                });
 
-                const toolbar = document.createElement('div');
-                toolbar.id = 'capture-toolbar';
+                btnRes.addEventListener('click', async e => {
+                    e.stopPropagation();
+                    const r = resultsDiv.getBoundingClientRect();
+                    Object.assign(selection.style, { left: r.left-8+'px', top: r.top-8+'px', width: r.width+16+'px', height: r.height+16+'px', display: 'block' });
+                    selection.classList.add('success');
+                    overlay.style.display = 'none'; hint.style.display = 'none'; toolbar.style.display = 'none';
+                    await raf2();
+                    try {
+                        const canvas = await captureRegion(r.left-8, r.top-8, r.width+16, r.height+16);
+                        cleanup(); await copyCanvasToClipboard(canvas);
+                    } catch (err) { cleanup(); showNotification('Erreur capture.', 'warning'); }
+                });
+                btnCan.addEventListener('click', e => { e.stopPropagation(); cleanup(); showNotification('Annulé.', 'info'); });
+            }
 
-                const btnResults
+            // ==================== INITIALISATION & ÉVÉNEMENTS ====================
+            btnAnalyze.addEventListener('click', () => {
+                const text = textarea.value;
+                if (!text.trim()) return (resultsDiv.innerHTML = '<div class="no-alert" style="color:red;">Veuillez coller le texte.</div>');
+                
+                const agents = analyzeText(text);
+                if (agents.length === 0) {
+                    showNotification('Aucun agent reconnu. Le texte doit contenir les matricules (ex: WEB_PST123_45).', 'warning');
+                }
+                renderResults(agents);
+            });
+
+            btnClear.addEventListener('click', () => {
+                textarea.value = '';
+                resultsDiv.innerHTML = '<div class="no-alert">En attente du tableau à analyser...</div>';
+                textarea.focus();
+            });
+
+            textarea.addEventListener('paste', () => {
+                setTimeout(() => {
+                    if (textarea.value.trim()) renderResults(analyzeText(textarea.value));
+                }, 100);
+            });
+
+            btnExportCsv.addEventListener('click', () => exportCSV(exportDateInput.value));
+            btnHistory.addEventListener('click', exportHistoryCSV);
+            btnLoadFile.addEventListener('click', loadFromFile);
+            btnCapture.addEventListener('click', startScreenCapture);
+
+            btnSyncActivate.addEventListener('click', activateSync);
+            btnSyncDeactivate.addEventListener('click', deactivateSync);
+            btnSyncQR.addEventListener('click', showQRCode);
+            btnQRClose.addEventListener('click', () => qrModal.classList.remove('show'));
+
+            setInterval(() => { timeSpan.textContent = new Date().toLocaleTimeString(); }, 1000);
+            timeSpan.textContent = new Date().toLocaleTimeString();
+
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.getVoices(); // Charge les voix
+            }
+
+            history = loadFromLocalStorage();
+            renderHistorySummary();
+            updateSyncUI();
+            checkSyncURLHash();
+        })();
+    </script>
+</body>
+</html>
