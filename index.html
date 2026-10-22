@@ -32,8 +32,8 @@
         textarea:focus { outline: none; border-color: var(--auchan-blue); }
         .button-group { display: flex; flex-wrap: wrap; gap: 10px; }
         button { padding: 10px 20px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: background 0.3s, transform 0.1s; font-size: 14px; }
-        .btn-capture, .btn-analyze, .btn-export, .btn-history, .btn-load-file, .btn-clear { background: #001d3d; color: white; }
-        .btn-capture:hover, .btn-analyze:hover, .btn-export:hover, .btn-history:hover, .btn-load-file:hover, .btn-clear:hover { background: #003566; }
+        .btn-capture, .btn-analyze, .btn-export, .btn-history, .btn-load-file, .btn-clear, .btn-sync { background: #001d3d; color: white; }
+        .btn-capture:hover, .btn-analyze:hover, .btn-export:hover, .btn-history:hover, .btn-load-file:hover, .btn-clear:hover, .btn-sync:hover { background: #003566; }
         button:active { transform: scale(0.98); }
         .results { min-height: 150px; background: var(--auchan-light); border-radius: 8px; padding: 15px; }
         .results .summary { font-weight: bold; margin-bottom: 12px; color: var(--auchan-dark); }
@@ -56,15 +56,17 @@
         .notification.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
         .notification.info { background: #cce5ff; color: #004085; border: 1px solid #b8daff; }
         .notification.warning { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
+        
+        /* Supabase Sync Row */
         .sync-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding: 10px 12px; background: #f0f4f8; border: 1px solid #d0d9e2; border-radius: 8px; }
         .sync-row label { font-weight: bold; color: var(--auchan-dark); }
-        .sync-row input[type="text"] { padding: 6px 10px; border: 1px solid #ccc; border-radius: 4px; width: 200px; font-family: monospace; font-size: 12px; }
+        .sync-row input[type="text"] { padding: 6px 10px; border: 1px solid #ccc; border-radius: 4px; width: 150px; font-family: monospace; font-size: 12px; }
         .sync-status { font-size: 12px; color: #666; margin-left: auto; }
         .sync-status.active { color: #28a745; font-weight: bold; }
         .sync-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #999; margin-right: 4px; }
         .sync-status.active .sync-dot { background: #28a745; animation: pulse 2s infinite; }
         @keyframes pulse { 0%,100%{opacity:1;}50%{opacity:0.4;} }
-        
+
         /* Audio controls */
         .audio-panel { display: flex; flex-wrap: wrap; gap: 15px; align-items: center; background: #f0f4f8; border: 1px solid #d0d9e2; border-radius: 8px; padding: 10px 12px; margin-bottom: 5px; }
         .audio-panel .group { display: flex; align-items: center; gap: 6px; font-size: 13px; }
@@ -72,19 +74,17 @@
         .audio-panel input[type="range"] { width: 80px; cursor: pointer; }
         .audio-panel label { font-weight: bold; color: var(--auchan-dark); white-space: nowrap; }
         
-        /* Overlay capture */
+        /* Modals */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 100001; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .modal-overlay.show { display: flex; }
+        .modal-content { background: white; padding: 24px; border-radius: 12px; text-align: center; max-width: 400px; width: 100%; }
+        
+        /* Capture overlay */
         #capture-overlay { position: fixed; inset: 0; z-index: 99999; cursor: crosshair; background: rgba(0,0,0,0.45); user-select: none; }
         #capture-selection { position: absolute; border: 2px solid #0055A5; background: transparent; display: none; pointer-events: none; box-shadow: 0 0 0 9999px rgba(0,0,0,0.45); z-index: 1; }
         #capture-selection.success { border-color: #28a745; box-shadow: 0 0 0 9999px rgba(0,0,0,0.45), 0 0 0 4px rgba(40,167,69,0.35); }
         #capture-hint { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.88); color: #fff; padding: 12px 22px; border-radius: 8px; font-size: 14px; z-index: 100000; pointer-events: none; white-space: nowrap; }
-        #capture-hint kbd { background: #fff; color: #000; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
         #capture-toolbar { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 100000; }
-        #capture-toolbar button { padding: 10px 18px; font-size: 13px; border-radius: 22px; }
-        #qr-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 100001; display: none; align-items: center; justify-content: center; padding: 20px; }
-        #qr-modal.show { display: flex; }
-        #qr-modal .qr-content { background: white; padding: 24px; border-radius: 12px; text-align: center; max-width: 380px; width: 100%; }
-        #qr-container { margin: 16px 0; display: flex; justify-content: center; min-height: 280px; align-items: center; }
-        #sync-url-text { font-size: 10px; color: #666; word-break: break-all; margin-bottom: 12px; }
     </style>
 </head>
 <body>
@@ -100,7 +100,7 @@
                 <div class="file-control">
                     <button class="btn-load-file" id="btn-load-file">📂 Historiser</button>
                     <input type="file" id="hidden-file-input" accept=".json,application/json" style="display:none;">
-                    <span id="file-status" style="font-size:12px; color:#666;">Aucun fichier chargé (localStorage)</span>
+                    <span id="file-status" style="font-size:12px; color:#666;">Aucun fichier chargé</span>
                 </div>
                 <div class="date-export">
                     <label for="export-date" style="font-weight:bold;">Date :</label>
@@ -114,13 +114,14 @@
                 </div>
             </div>
 
+            <!-- SYNC ROW (Supabase) -->
             <div class="sync-row">
-                <label>🔄 Sync :</label>
-                <input type="text" id="sync-code" placeholder="ID de session (auto)">
-                <button class="btn-load-file" id="btn-sync-activate">Activer</button>
-                <button class="btn-clear" id="btn-sync-deactivate" style="display:none;">Arrêter</button>
-                <button class="btn-history" id="btn-sync-qr" style="display:none;">📱 QR</button>
-                <span class="sync-status" id="sync-status"><span class="sync-dot"></span>Inactif</span>
+                <label>🔄 Supabase Sync :</label>
+                <input type="text" id="sync-code" placeholder="Code de session">
+                <button class="btn-sync" id="btn-sync-activate">Connecter</button>
+                <button class="btn-clear" id="btn-sync-deactivate" style="display:none;">Déconnecter</button>
+                <button class="btn-history" id="btn-sync-qr" style="display:none;">📱 Afficher QR</button>
+                <span class="sync-status" id="sync-status"><span class="sync-dot"></span>Non connecté</span>
             </div>
 
             <!-- Audio Panel -->
@@ -169,29 +170,38 @@
         </div>
     </div>
 
-    <div id="qr-modal">
-        <div class="qr-content">
-            <h3>📱 Scanner pour synchroniser</h3>
-            <p style="font-size:12px; color:#666; margin-bottom:16px;">Ouvrez cet URL sur votre téléphone</p>
-            <div id="qr-container">Génération...</div>
-            <p id="sync-url-text"></p>
-            <button class="btn-clear" id="btn-qr-close">Fermer</button>
+    <!-- Modal QR -->
+    <div class="modal-overlay" id="qr-modal">
+        <div class="modal-content">
+            <h3>📱 Scanner pour connecter</h3>
+            <p style="font-size:12px; color:#666; margin: 10px 0 20px;">Scannez avec l'appareil photo du téléphone pour lier les deux appareils.</p>
+            <div id="qr-container" style="margin-bottom: 20px; display: flex; justify-content: center;"></div>
+            <button class="btn-clear" id="btn-close-qr" style="width:100%;">Fermer</button>
         </div>
     </div>
 
+    <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <script>
         (function() {
             'use strict';
 
+            // ==================== CONFIGURATION SUPABASE ====================
+            const SUPABASE_URL = 'https://tktxzaiatuyaeqwdubcg.supabase.co';
+            const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRrdHh6YWlhdHV5YWVxd2R1YmNnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI2NTc5NDUsImV4cCI6MjEwODIzMzk0NX0.7Axkwz9ahsz0VzG67kznJx9e47XE3O166StSq28VS-U';
+            
+            // Initialisation du client Supabase
+            const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
             // ==================== CONSTANTES ====================
             const STORAGE_KEY = 'wfm_auchan_alert_history';
-            const SYNC_ID_KEY = 'wfm_sync_id';
+            const SYNC_ROOM_KEY = 'wfm_supabase_room';
             const SOUND_DURATION = 300;
             const SOUND_FREQUENCY = 880;
-            const SYNC_POLL_INTERVAL = 5000;
 
             // ==================== DOM ====================
             const textarea = document.getElementById('paste-input');
@@ -208,15 +218,17 @@
             const notificationDiv = document.getElementById('notification');
             const timeSpan = document.getElementById('current-time');
             const fileStatusSpan = document.getElementById('file-status');
+            
+            // Sync
             const syncCodeInput = document.getElementById('sync-code');
             const btnSyncActivate = document.getElementById('btn-sync-activate');
             const btnSyncDeactivate = document.getElementById('btn-sync-deactivate');
             const btnSyncQR = document.getElementById('btn-sync-qr');
             const syncStatusSpan = document.getElementById('sync-status');
             const qrModal = document.getElementById('qr-modal');
-            const btnQRClose = document.getElementById('btn-qr-close');
+            const btnCloseQr = document.getElementById('btn-close-qr');
             const qrContainer = document.getElementById('qr-container');
-            const syncUrlText = document.getElementById('sync-url-text');
+
             // Audio
             const musicSelect = document.getElementById('music-select');
             const musicVolume = document.getElementById('music-volume');
@@ -229,14 +241,13 @@
             // ==================== STATE ====================
             let history = [];
             let fileHandle = null;
-            let currentAlerts = [];
-            let renderingFromSync = false;
-            let syncPollTimer = null;
-            let syncLastPushTime = 0;
-            let lastAnalysisAgentsCount = 0;
             let bgAudio = new Audio();
             bgAudio.loop = true;
             bgAudio.volume = 0.3;
+            
+            let syncChannel = null;
+            let currentRoomId = null;
+            let isSyncing = false;
 
             // ==================== PERSISTANCE ====================
             function loadFromLocalStorage() {
@@ -250,7 +261,6 @@
             function isFileSystemAccessSupported() {
                 return typeof window.showOpenFilePicker === 'function';
             }
-
             async function loadFromFile() {
                 if (isFileSystemAccessSupported()) {
                     try {
@@ -376,7 +386,6 @@
                     opt.textContent = `${v.name} (${v.lang})`;
                     voiceSelect.appendChild(opt);
                 });
-                // Sélectionner la voix par défaut (première)
                 if (fr.length > 0) voiceSelect.value = fr[0].name;
             }
             if ('speechSynthesis' in window) {
@@ -394,7 +403,6 @@
                 }
             });
             musicVolume.addEventListener('input', () => { bgAudio.volume = parseFloat(musicVolume.value); });
-            voiceVolume.addEventListener('input', () => {}); // read directly in speakAlert
 
             function extractFirstName(fullName) {
                 if (!fullName) return '';
@@ -434,10 +442,8 @@
             }
 
             // ==================== RENDU ====================
-            function renderAlerts(alerts, agentsCount, options = {}) {
-                currentAlerts = alerts; lastAnalysisAgentsCount = agentsCount;
-                const prefix = options.fromSync ? '🔄 (sync) ' : '';
-                let html = `<div class="summary">${prefix}🚨 ${alerts.length} alertes (${agentsCount} agents analysés)</div>`;
+            function renderAlerts(alerts, agentsCount) {
+                let html = `<div class="summary">🚨 ${alerts.length} alertes (${agentsCount} agents analysés)</div>`;
                 if (agentsCount === 0) {
                     html += `<div class="no-alert">Aucun agent trouvé. Le texte doit contenir les matricules (ex: WEB_PST123_45).</div>`;
                 } else if (alerts.length === 0) {
@@ -467,10 +473,11 @@
                     });
                 });
             }
-            function renderResults(agents) {
+            function renderResults(agents, isFromSync = false) {
                 const alerts = getAlerts(agents);
-                renderAlerts(alerts, agents.length, { fromSync: renderingFromSync });
-                if (alerts.length > 0 && !renderingFromSync) {
+                renderAlerts(alerts, agents.length);
+                
+                if (alerts.length > 0 && !isFromSync) {
                     if (soundToggle.checked) {
                         try {
                             const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -483,7 +490,6 @@
                         } catch (e) {}
                     }
                     addAlertsToHistory(alerts);
-                    if (isSyncActive()) pushToSync();
                 }
             }
 
@@ -495,7 +501,7 @@
                 renderHistorySummary();
             }
             function renderHistorySummary() {
-                const base = fileHandle ? `Fichier : ${fileHandle.name}` : 'Aucun fichier chargé (localStorage)';
+                const base = fileHandle ? `Fichier : ${fileHandle.name}` : 'Aucun fichier chargé';
                 fileStatusSpan.textContent = `${base} (${history.length} entrées)`;
             }
             function csvEscape(v) { const s = String(v == null ? '' : v); return /[",\n;]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; }
@@ -521,103 +527,106 @@
                 document.body.appendChild(link); link.click(); document.body.removeChild(link);
             }
 
-            // ==================== SYNC (ExtendsClass JSON Storage) ====================
-            // API: https://extendsclass.com/json-storage.html
-            // GET  https://json.extendsclass.com/bin/{id}
-            // POST https://json.extendsclass.com/bin
-            // PUT  https://json.extendsclass.com/bin/{id}
-            const SYNC_BASE = 'https://json.extendsclass.com/bin';
-            function isSyncActive() { return !!localStorage.getItem(SYNC_ID_KEY); }
+            // ==================== SUPABASE SYNC (Realtime Broadcast) ====================
+            function isSyncActive() { return !!localStorage.getItem(SYNC_ROOM_KEY); }
+            
             function updateSyncUI() {
-                const active = isSyncActive(), id = localStorage.getItem(SYNC_ID_KEY);
+                const active = isSyncActive();
+                const id = localStorage.getItem(SYNC_ROOM_KEY);
                 btnSyncDeactivate.style.display = active ? '' : 'none';
                 btnSyncQR.style.display = active ? '' : 'none';
+                syncCodeInput.disabled = active;
+                
                 if (active) {
                     syncStatusSpan.classList.add('active');
-                    syncStatusSpan.innerHTML = `<span class="sync-dot"></span>Actif (${id ? id.slice(-6) : ''})`;
+                    syncStatusSpan.innerHTML = `<span class="sync-dot"></span>Connecté (${id})`;
+                    syncCodeInput.value = id;
                 } else {
                     syncStatusSpan.classList.remove('active');
-                    syncStatusSpan.innerHTML = `<span class="sync-dot"></span>Inactif`;
+                    syncStatusSpan.innerHTML = `<span class="sync-dot"></span>Non connecté`;
+                    syncCodeInput.value = '';
                 }
             }
-            async function activateSync() {
-                const manualId = (syncCodeInput.value || '').trim();
-                if (manualId) {
-                    try {
-                        const resp = await fetch(`${SYNC_BASE}/${manualId}`);
-                        if (!resp.ok) throw new Error();
-                        localStorage.setItem(SYNC_ID_KEY, manualId);
-                        syncCodeInput.value = '';
-                        showNotification('Session rejointe.', 'success');
-                        updateSyncUI(); startSyncPolling(); pullFromSync();
-                    } catch (e) { showNotification('ID introuvable.', 'warning'); }
-                    return;
+
+            async function connectSupabase(roomToJoin) {
+                let roomId = roomToJoin;
+                if (!roomId) {
+                    // Créer un ID de room aléatoire (ex: WFM-AB12)
+                    roomId = 'WFM-' + Math.random().toString(36).substring(2, 6).toUpperCase();
                 }
-                showNotification('Création de la session...', 'info');
-                try {
-                    const resp = await fetch(SYNC_BASE, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ history, currentAlerts, agentsCount: lastAnalysisAgentsCount, updatedAt: Date.now() })
-                    });
-                    const json = await resp.json();
-                    const id = json.id;
-                    if (!id) throw new Error();
-                    localStorage.setItem(SYNC_ID_KEY, id);
-                    updateSyncUI(); startSyncPolling();
-                    showNotification('Session créée. Cliquez sur 📱 QR.', 'success');
-                } catch (e) { showNotification('Erreur de création. Vérifiez la connexion.', 'warning'); }
-            }
-            async function pushToSync() {
-                const id = localStorage.getItem(SYNC_ID_KEY); if (!id) return;
-                try {
-                    syncLastPushTime = Date.now();
-                    await fetch(`${SYNC_BASE}/${id}`, {
-                        method: 'PUT', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ history, currentAlerts, agentsCount: lastAnalysisAgentsCount, updatedAt: syncLastPushTime })
-                    });
-                } catch (e) {}
-            }
-            async function pullFromSync() {
-                const id = localStorage.getItem(SYNC_ID_KEY); if (!id) return;
-                try {
-                    const resp = await fetch(`${SYNC_BASE}/${id}`);
-                    if (!resp.ok) return;
-                    const data = await resp.json();
-                    if (!data) return;
-                    if (Array.isArray(data.history)) {
-                        const key = e => `${e.timestamp}|${e.agent}|${e.status}|${e.duration}`;
-                        const existing = new Set(history.map(key));
-                        let added = 0;
-                        data.history.forEach(e => { if (e && !existing.has(key(e))) { history.push(e); existing.add(key(e)); added++; } });
-                        if (added > 0) { saveToLocalStorage(); renderHistorySummary(); }
+                
+                if (syncChannel) {
+                    supabaseClient.removeChannel(syncChannel);
+                }
+                
+                syncChannel = supabaseClient.channel(`room_${roomId}`);
+                
+                syncChannel.on('broadcast', { event: 'sync_data' }, (payload) => {
+                    // Réception des données de l'autre appareil
+                    if (payload.payload && payload.payload.text) {
+                        textarea.value = payload.payload.text;
+                        // On analyse et affiche sans rejouer le son ni ajouter à l'historique en double
+                        const agents = analyzeText(payload.payload.text);
+                        renderResults(agents, true);
+                        showNotification('🔄 Données reçues du PC !', 'info');
                     }
-                    if (Array.isArray(data.currentAlerts) && typeof data.updatedAt === 'number' && data.updatedAt > syncLastPushTime) {
-                        renderingFromSync = true;
-                        try { renderAlerts(data.currentAlerts, data.agentsCount || data.currentAlerts.length, { fromSync: true }); } finally { renderingFromSync = false; }
+                });
+
+                syncChannel.subscribe((status) => {
+                    if (status === 'SUBSCRIBED') {
+                        isSyncing = true;
+                        localStorage.setItem(SYNC_ROOM_KEY, roomId);
+                        updateSyncUI();
+                        showNotification('✅ Connecté à la session Supabase.', 'success');
+                        // Envoyer nos données actuelles à la connexion
+                        sendSyncData();
+                    } else if (status === 'CLOSED' || status === 'CHANNEL_ERROR') {
+                        isSyncing = false;
                     }
-                } catch (e) {}
+                });
             }
-            function startSyncPolling() { if (!syncPollTimer) syncPollTimer = setInterval(pullFromSync, SYNC_POLL_INTERVAL); }
-            function stopSyncPolling() { if (syncPollTimer) { clearInterval(syncPollTimer); syncPollTimer = null; } }
-            function deactivateSync() { localStorage.removeItem(SYNC_ID_KEY); stopSyncPolling(); updateSyncUI(); showNotification('Sync désactivée.', 'info'); }
+
+            async function sendSyncData() {
+                if (isSyncing && syncChannel) {
+                    await syncChannel.send({
+                        type: 'broadcast',
+                        event: 'sync_data',
+                        payload: { text: textarea.value, timestamp: Date.now() }
+                    });
+                }
+            }
+
+            function disconnectSupabase() {
+                if (syncChannel) {
+                    supabaseClient.removeChannel(syncChannel);
+                    syncChannel = null;
+                }
+                isSyncing = false;
+                localStorage.removeItem(SYNC_ROOM_KEY);
+                updateSyncUI();
+                showNotification('Déconnecté de Supabase.', 'info');
+            }
+
             async function showQRCode() {
-                const id = localStorage.getItem(SYNC_ID_KEY); if (!id) return;
-                if (!window.QRCode) return showNotification('Bibliothèque QR non disponible.', 'warning');
-                const syncUrl = `${location.href.split('#')[0]}#sync=${id}`;
-                qrContainer.innerHTML = 'Génération...'; syncUrlText.textContent = syncUrl;
+                const roomId = localStorage.getItem(SYNC_ROOM_KEY);
+                if (!roomId) return;
+                
+                // L'URL inclut le hash pour que le téléphone se connecte automatiquement
+                const syncUrl = `${location.href.split('#')[0]}#room=${roomId}`;
+                qrContainer.innerHTML = 'Génération...';
+                
                 try {
-                    const dataUrl = await window.QRCode.toDataURL(syncUrl, { width: 280, margin: 2, color: { dark: '#001d3d', light: '#ffffff' } });
-                    qrContainer.innerHTML = `<img src="${dataUrl}" alt="QR" style="width:280px;height:280px;display:block;">`;
+                    const dataUrl = await window.QRCode.toDataURL(syncUrl, { width: 250, margin: 2, color: { dark: '#001d3d', light: '#ffffff' } });
+                    qrContainer.innerHTML = `<img src="${dataUrl}" alt="QR" style="border: 1px solid #ccc; border-radius: 8px;">`;
                 } catch (e) { qrContainer.textContent = 'Erreur QR'; }
                 qrModal.classList.add('show');
             }
-            function checkSyncURLHash() {
-                const m = (location.hash || '').match(/sync=([A-Za-z0-9-]+)/);
+
+            function checkURLForRoom() {
+                const m = (location.hash || '').match(/room=([A-Za-z0-9-]+)/);
                 if (m) {
-                    localStorage.setItem(SYNC_ID_KEY, m[1]);
-                    updateSyncUI(); startSyncPolling(); pullFromSync();
-                    showNotification('Session sync activée via URL.', 'success');
+                    const roomId = m[1];
+                    connectSupabase(roomId);
                     try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
                 }
             }
@@ -699,26 +708,50 @@
                 const text = textarea.value;
                 if (!text.trim()) return (resultsDiv.innerHTML = '<div class="no-alert" style="color:red;">Veuillez coller le texte.</div>');
                 const agents = analyzeText(text);
-                if (agents.length === 0) showNotification('Aucun agent reconnu. Le texte doit contenir les matricules (WEB_PST...).', 'warning');
+                if (agents.length === 0) showNotification('Aucun agent reconnu. Le texte doit contenir les matricules.', 'warning');
                 renderResults(agents);
+                sendSyncData(); // Envoi instantané via Supabase
             });
-            btnClear.addEventListener('click', () => { textarea.value = ''; resultsDiv.innerHTML = '<div class="no-alert">En attente du tableau à analyser...</div>'; textarea.focus(); });
-            textarea.addEventListener('paste', () => { setTimeout(() => { if (textarea.value.trim()) renderResults(analyzeText(textarea.value)); }, 100); });
+
+            btnClear.addEventListener('click', () => { 
+                textarea.value = ''; 
+                resultsDiv.innerHTML = '<div class="no-alert">En attente du tableau à analyser...</div>'; 
+                textarea.focus(); 
+                sendSyncData();
+            });
+
+            textarea.addEventListener('paste', () => { 
+                setTimeout(() => { 
+                    if (textarea.value.trim()) {
+                        renderResults(analyzeText(textarea.value)); 
+                        sendSyncData();
+                    }
+                }, 100); 
+            });
+
             btnExportCsv.addEventListener('click', () => exportCSV(exportDateInput.value));
             btnHistory.addEventListener('click', exportHistoryCSV);
             btnLoadFile.addEventListener('click', loadFromFile);
             btnCapture.addEventListener('click', startScreenCapture);
-            btnSyncActivate.addEventListener('click', activateSync);
-            btnSyncDeactivate.addEventListener('click', deactivateSync);
-            btnSyncQR.addEventListener('click', showQRCode);
-            btnQRClose.addEventListener('click', () => qrModal.classList.remove('show'));
 
+            // Sync Events
+            btnSyncActivate.addEventListener('click', () => {
+                const manualCode = syncCodeInput.value.trim().toUpperCase();
+                connectSupabase(manualCode || null);
+            });
+            btnSyncDeactivate.addEventListener('click', disconnectSupabase);
+            btnSyncQR.addEventListener('click', showQRCode);
+            btnCloseQr.addEventListener('click', () => qrModal.classList.remove('show'));
+
+            // Horloge
             setInterval(() => { timeSpan.textContent = new Date().toLocaleTimeString(); }, 1000);
             timeSpan.textContent = new Date().toLocaleTimeString();
+
+            // Initialisation
             history = loadFromLocalStorage();
             renderHistorySummary();
             updateSyncUI();
-            checkSyncURLHash();
+            checkURLForRoom(); // Détecte si l'URL contient #room=...
         })();
     </script>
 </body>
