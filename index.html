@@ -409,7 +409,7 @@
                 const cleaned = fullName.replace(/\s*WEB_PST\d+_\d+\s*$/i, '').trim();
                 const parts = cleaned.split(/\s+/).filter(Boolean);
                 if (!parts.length) return cleaned;
-                if (parts.length >= 2 && /^DMT$/i.test(parts[0])) return parts[1];
+                if (parts.length >= 2 && /^APPEL DE$/i.test(parts[0])) return parts[1];
                 return parts[0];
             }
             function durationToSpeech(durStr) {
@@ -427,7 +427,7 @@
                 document.querySelectorAll('.btn-play').forEach(b => { b.classList.remove('speaking'); b.textContent = '▶'; });
                 const firstName = extractFirstName(agent.name);
                 const durationSpeech = durationToSpeech(agent.durationStr);
-                const text = `DMT. ${firstName}. ${durationSpeech}.`;
+                const text = `APPEL DE. ${firstName}. ${durationSpeech}.`;
                 const utt = new SpeechSynthesisUtterance(text);
                 utt.lang = 'fr-FR';
                 utt.rate = 0.88;
