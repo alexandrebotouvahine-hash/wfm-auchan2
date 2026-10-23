@@ -427,7 +427,7 @@
                 document.querySelectorAll('.btn-play').forEach(b => { b.classList.remove('speaking'); b.textContent = '▶'; });
                 const firstName = extractFirstName(agent.name);
                 const durationSpeech = durationToSpeech(agent.durationStr);
-                const text = `APPEL DE. ${firstName}. ${durationSpeech}.`;
+                const text = `APPEL DE ${firstName}, ${durationSpeech}.`;
                 const utt = new SpeechSynthesisUtterance(text);
                 utt.lang = 'fr-FR';
                 utt.rate = 0.88;
